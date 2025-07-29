@@ -187,9 +187,9 @@ const chats = await client.chats.findAll();
 ```ts
 client.setInstance("my-instance-01");
 // Update presence
-await client.chats.updatePresence({
-  number: "5511999999999",
+await client.chats.updatePresence("5511999999999", {
   presence: "composing",
+  delay: 1000,
 });
 
 // Mark as read

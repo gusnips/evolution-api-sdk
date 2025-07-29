@@ -1,42 +1,64 @@
 // Pure TypeScript interfaces for better IDE support and performance
+
+/**
+ * Options for presence configuration
+ */
+export interface PresenceOptions {
+  /**
+   * Delay of the presence in milliseconds
+   */
+  delay: number;
+  /**
+   * Presence state
+   * - `composing`: typing a message
+   * - `recording`: recording an audio
+   */
+  presence: "composing" | "recording";
+  /**
+   * Chat number or JID to receive the presence
+   */
+  number: string;
+}
+
+/**
+ * Request body structure for send presence API endpoint
+ * Based on Evolution API v2 documentation
+ */
 export interface PresenceRequest {
-	/**
-	 * Chat number or JID to receve the presence
-	 */
-	number: string;
-	/**
-	 * Duration of the presence in millisseconds
-	 */
-	duration?: number;
-	/**
-	 * Delay of the presence in millisseconds
-	 * this is the correct name of the field
-	 * https://doc.evolution-api.com/v1/api-reference/chat-controller/send-presence#delay
-	 */
-	delay: number;
-	/**
-	 * Presence state
-	 * - `composing`: typing a message
-	 * - `recording`: recording an audio
-	 */
-	presence: "composing" | "recording";
-	/**
-	 * Whether to wait until the presence is finished (duration)
-	 */
-	waitUntilFinish?: boolean;
+  /**
+   * Chat number or JID to receive the presence
+   */
+  number: string;
+  /**
+   * Presence options
+   */
+  options: PresenceOptions;
 }
 
+/**
+ * Input parameters for the presence method (excluding number)
+ */
+export interface PresenceParams {
+  /**
+   * Delay of the presence in milliseconds
+   */
+  delay: number;
+  /**
+   * Presence state
+   * - `composing`: typing a message
+   * - `recording`: recording an audio
+   */
+  presence: "composing" | "recording";
+  /**
+   * Whether to wait until the presence is finished (duration)
+   * @deprecated This parameter is not used by the Evolution API
+   */
+  waitUntilFinish?: boolean;
+}
+
+// Legacy compatibility - keeping PresenceBody for backward compatibility
 export interface PresenceBody {
-	number: string;
-	presence: "composing" | "recording";
-	delay: number;
+  number: string;
+  presence: "composing" | "recording";
+  delay: number;
 }
-
-// Transform function
-export const PresenceBodyTransform = (
-	{ waitUntilFinish, duration, ...data }: PresenceRequest
-): PresenceBody => ({ ...data, delay: duration });
-
-// Backward compatibility aliases
-export type PresenceOptions = PresenceRequest;
-export const BodySchema = { parse: PresenceBodyTransform };

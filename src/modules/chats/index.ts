@@ -52,15 +52,26 @@ export class ChatsModule {
 
   /**
    * Updates presence status
-   * @param options - Presence options
+   * @param number - Chat number or JID to receive the presence
+   * @param params - Presence parameters
    * @param methodOptions - Method-specific options (instance override)
    */
   async updatePresence(
-    options: Presence.PresenceRequest,
+    number: string,
+    params: Presence.PresenceParams,
     methodOptions?: MethodOptions
   ): Promise<void> {
+    const body: Presence.PresenceRequest = {
+      number,
+      options: {
+        delay: params.delay,
+        presence: params.presence,
+        number,
+      },
+    };
+
     await this.api.post(Routes.Chats.SendPresence, {
-      body: options,
+      body,
       ...methodOptions,
     });
   }
