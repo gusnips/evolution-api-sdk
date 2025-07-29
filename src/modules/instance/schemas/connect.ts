@@ -6,7 +6,7 @@ export interface ConnectRequest {
 
 export interface ConnectInstanceInfo {
   instanceName: string;
-  status: string;
+  state: string;
 }
 
 export interface ConnectHash {
@@ -25,4 +25,4 @@ export interface ConnectResponse {
 }
 
 // Backward compatibility aliases
-export type ConnectOptions = ConnectRequest; 
+export type ConnectOptions = ConnectRequest;

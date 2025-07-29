@@ -1,9 +1,11 @@
+import { WebhookEventSetup } from "@/types/webhooks";
 // Pure TypeScript interfaces for better IDE support and performance
 export interface SetRequest {
-  url: string;
   enabled: boolean;
-  webhook_by_events: boolean;
-  events: string[];
+  url: string;
+  webhookByEvents: boolean;
+  webhookBase64: boolean;
+  events: WebhookEventSetup[];
 }
 
 export interface SetResponse {
@@ -11,4 +13,4 @@ export interface SetResponse {
 }
 
 // Backward compatibility aliases
-export type SetOptions = SetRequest; 
+export type SetOptions = SetRequest;
