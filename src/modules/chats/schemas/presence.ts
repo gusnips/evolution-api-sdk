@@ -7,7 +7,13 @@ export interface PresenceRequest {
 	/**
 	 * Duration of the presence in millisseconds
 	 */
-	duration: number;
+	duration?: number;
+	/**
+	 * Delay of the presence in millisseconds
+	 * this is the correct name of the field
+	 * https://doc.evolution-api.com/v1/api-reference/chat-controller/send-presence#delay
+	 */
+	delay: number;
 	/**
 	 * Presence state
 	 * - `composing`: typing a message
