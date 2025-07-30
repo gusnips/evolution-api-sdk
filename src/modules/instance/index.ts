@@ -87,6 +87,9 @@ export class InstanceModule {
   ): Promise<SetPresence.SetPresenceResponse> {
     const { instanceName, ...rest } = options;
     const instance = methodOptions?.instance ?? instanceName;
+    if (!instance) {
+      throw new Error("Instance name is required");
+    }
     const response = await this.api.post(Routes.Instance.SetPresence, {
       body: rest,
       instance,
