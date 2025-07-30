@@ -22,12 +22,7 @@ export type {
   FindStatusMessageResponse,
 } from "./find-status-message";
 export type { MarkAsReadOptions, MarkAsReadResponse } from "./mark-as-read";
-export type {
-  PresenceOptions,
-  PresenceRequest,
-  PresenceParams,
-  PresenceBody,
-} from "./presence";
+export type { PresenceOptions, PresenceParams } from "./presence";
 export type {
   UpdateMessageOptions,
   UpdateMessageResponse,

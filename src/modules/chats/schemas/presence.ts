@@ -39,10 +39,3 @@ export interface PresenceParams {
    */
   waitUntilFinish?: boolean;
 }
-
-// Legacy compatibility - keeping PresenceBody for backward compatibility
-export interface PresenceBody {
-  number: string;
-  presence: "composing" | "recording";
-  delay: number;
-}
