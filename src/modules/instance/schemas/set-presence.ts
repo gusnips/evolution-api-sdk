@@ -1,8 +1,8 @@
 // Pure TypeScript interfaces for better IDE support and performance
 
 export interface SetPresenceRequest {
-  instanceName: string;
-  presence: "unavailable" | "available" | "composing" | "recording" | "paused";
+  instanceName?: string;
+  presence: "unavailable" | "available";
 }
 
 export interface SetPresenceData {
@@ -17,4 +17,4 @@ export interface SetPresenceResponse {
 }
 
 // Backward compatibility aliases
-export type SetPresenceOptions = SetPresenceRequest; 
+export type SetPresenceOptions = SetPresenceRequest;

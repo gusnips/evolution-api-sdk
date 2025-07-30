@@ -10,6 +10,8 @@ import type * as Logout from "./schemas/logout";
 import type * as Restart from "./schemas/restart";
 import type * as SetPresence from "./schemas/set-presence";
 
+import type { MethodOptions } from "@/types/api";
+
 export class InstanceModule {
   constructor(private readonly api: ApiService) {}
 
@@ -80,11 +82,14 @@ export class InstanceModule {
   }
 
   async setPresence(
-    options: SetPresence.SetPresenceRequest
+    options: SetPresence.SetPresenceRequest,
+    methodOptions?: MethodOptions
   ): Promise<SetPresence.SetPresenceResponse> {
+    const { instanceName, ...rest } = options;
+    const instance = methodOptions?.instance ?? instanceName;
     const response = await this.api.post(Routes.Instance.SetPresence, {
-      body: options,
-      instance: options.instanceName,
+      body: rest,
+      instance,
       isInstanceUrl: true,
     });
     return response as SetPresence.SetPresenceResponse;
