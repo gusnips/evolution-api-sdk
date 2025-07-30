@@ -26,28 +26,48 @@ export class InstanceModule {
   }
 
   async connect(
-    options: Connect.ConnectRequest
+    options: Connect.ConnectRequest,
+    methodOptions?: MethodOptions
   ): Promise<Connect.ConnectResponse> {
+    const { instanceName } = options;
+    const instance = methodOptions?.instance ?? instanceName;
+    if (!instance) {
+      throw new Error("Instance name is required");
+    }
     const response = await this.api.get(Routes.Instance.Connect, {
-      instance: options.instanceName,
+      instance,
       isInstanceUrl: true,
     });
     return response as Connect.ConnectResponse;
   }
 
   async connectionState(
-    options: ConnectionState.ConnectionStateRequest
+    options: ConnectionState.ConnectionStateRequest,
+    methodOptions?: MethodOptions
   ): Promise<ConnectionState.ConnectionStateResponse> {
+    const { instanceName } = options;
+    const instance = methodOptions?.instance ?? instanceName;
+    if (!instance) {
+      throw new Error("Instance name is required");
+    }
     const response = await this.api.get(Routes.Instance.ConnectionState, {
-      instance: options.instanceName,
+      instance,
       isInstanceUrl: true,
     });
     return response as ConnectionState.ConnectionStateResponse;
   }
 
-  async logout(options: Logout.LogoutRequest): Promise<Logout.LogoutResponse> {
+  async logout(
+    options: Logout.LogoutRequest,
+    methodOptions?: MethodOptions
+  ): Promise<Logout.LogoutResponse> {
+    const { instanceName } = options;
+    const instance = methodOptions?.instance ?? instanceName;
+    if (!instance) {
+      throw new Error("Instance name is required");
+    }
     const response = await this.api.delete(Routes.Instance.Logout, {
-      instance: options.instanceName,
+      instance,
       isInstanceUrl: true,
     });
     return response as Logout.LogoutResponse;
@@ -62,10 +82,16 @@ export class InstanceModule {
   }
 
   async restart(
-    options: Restart.RestartRequest
+    options: Restart.RestartRequest,
+    methodOptions?: MethodOptions
   ): Promise<Restart.RestartResponse> {
+    const { instanceName } = options;
+    const instance = methodOptions?.instance ?? instanceName;
+    if (!instance) {
+      throw new Error("Instance name is required");
+    }
     const response = await this.api.post(Routes.Instance.Restart, {
-      instance: options.instanceName,
+      instance,
       isInstanceUrl: true,
     });
     return response as Restart.RestartResponse;
