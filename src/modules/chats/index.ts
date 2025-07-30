@@ -60,6 +60,10 @@ export class ChatsModule {
     options: Presence.PresenceOptions,
     methodOptions?: MethodOptions
   ): Promise<void> {
+    if (!options.number) {
+      throw new Error("Number is required");
+    }
+
     if (validateJid(options.number) && !validateGroupJid(options.number)) {
       options.number = `${options.number}@s.whatsapp.net`;
     }
