@@ -19,22 +19,6 @@ export interface PresenceOptions {
    */
   number: string;
 }
-
-/**
- * Request body structure for send presence API endpoint
- * Based on Evolution API v2 documentation
- */
-export interface PresenceRequest {
-  /**
-   * Chat number or JID to receive the presence
-   */
-  number: string;
-  /**
-   * Presence options
-   */
-  options: PresenceOptions;
-}
-
 /**
  * Input parameters for the presence method (excluding number)
  */

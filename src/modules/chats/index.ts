@@ -1,5 +1,6 @@
 import { Routes } from "@/api/routes";
 import type { ApiService } from "@/api/service";
+import { validateGroupJid, validateJid } from "@/schemas/common";
 import type { MethodOptions } from "@/types/api";
 
 import type * as Archive from "./schemas/archive";
@@ -52,26 +53,19 @@ export class ChatsModule {
 
   /**
    * Updates presence status
-   * @param number - Chat number or JID to receive the presence
    * @param params - Presence parameters
    * @param methodOptions - Method-specific options (instance override)
    */
   async updatePresence(
-    number: string,
-    params: Presence.PresenceParams,
+    options: Presence.PresenceOptions,
     methodOptions?: MethodOptions
   ): Promise<void> {
-    const body: Presence.PresenceRequest = {
-      number,
-      options: {
-        delay: params.delay,
-        presence: params.presence,
-        number,
-      },
-    };
+    if (validateJid(options.number) && !validateGroupJid(options.number)) {
+      options.number = `${options.number}@s.whatsapp.net`;
+    }
 
     await this.api.post(Routes.Chats.SendPresence, {
-      body,
+      body: options,
       ...methodOptions,
     });
   }
