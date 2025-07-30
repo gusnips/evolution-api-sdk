@@ -64,7 +64,7 @@ export class ChatsModule {
       throw new Error("Number is required");
     }
 
-    if (validateJid(options.number) && !validateGroupJid(options.number)) {
+    if (!validateJid(options.number) && !validateGroupJid(options.number)) {
       options.number = `${options.number}@s.whatsapp.net`;
     }
 
