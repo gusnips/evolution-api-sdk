@@ -81,8 +81,8 @@ export type * from "./modules/settings/schemas";
 export type { ClientOptions };
 
 // API types
-export type { APIRequestInit, MethodOptions } from "./types/api";
-export type { MessageUpdateStatus } from "./types/messages";
+export { APIRequestInit, MethodOptions } from "./types/api";
+export { MessageUpdateStatus } from "./types/messages";
 export { ChatId, GroupJid, Jid, MessageId } from "./types/tags";
-export type * from "./types/webhooks";
-export type * from "./types/events";
+export * from "./types/webhooks";
+export { WebhookEvent, WebhookEventSetup } from "./types/events";
