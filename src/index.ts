@@ -69,7 +69,6 @@ export class EvolutionClient {
 }
 
 export { EvolutionApiError } from "./api/errors";
-export { ChatId, GroupJid, Jid, MessageId } from "./types/tags";
 export { phoneNumberFromJid } from "./utils/phone-numer-from-jid";
 
 export type * from "./modules/chats/schemas";
@@ -83,3 +82,7 @@ export type { ClientOptions };
 
 // API types
 export type { APIRequestInit, MethodOptions } from "./types/api";
+export type { MessageUpdateStatus } from "./types/messages";
+export { ChatId, GroupJid, Jid, MessageId } from "./types/tags";
+export type * from "./types/webhooks";
+export type * from "./types/events";
