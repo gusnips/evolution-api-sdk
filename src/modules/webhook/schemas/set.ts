@@ -1,4 +1,4 @@
-import { WebhookEventSetup } from "@/types/webhooks";
+import { WebhookEventSetup } from "@/types/events";
 // Pure TypeScript interfaces for better IDE support and performance
 export interface SetRequest {
   enabled: boolean;
