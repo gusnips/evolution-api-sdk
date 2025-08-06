@@ -1,3 +1,5 @@
+import { MessageUpdateStatus } from "./messages";
+
 export interface DeviceListMetadata {
   senderKeyHash: string;
   senderTimestamp: string;
@@ -97,7 +99,7 @@ export type MessageContent = {
 };
 
 export interface MessageUpdate {
-  status: string;
+  status: MessageUpdateStatus;
 }
 
 export interface ConnectionUpdatePayload {

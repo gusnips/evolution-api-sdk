@@ -715,11 +715,14 @@ async function handleMessageUpdate(
 
   // Handle read receipts, delivery confirmations, etc.
   switch (status) {
-    case "delivered":
+    case MessageUpdateStatus.DELIVERY_ACK:
       console.log("Message delivered");
       break;
-    case "read":
+    case MessageUpdateStatus.READ:
       console.log("Message read by recipient");
+      break;
+    case MessageUpdateStatus.SERVER_ACK:
+      console.log("Message sent to server");
       break;
   }
 }

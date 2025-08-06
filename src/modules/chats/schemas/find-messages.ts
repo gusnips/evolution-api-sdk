@@ -9,9 +9,18 @@ import type {
 export interface FindMessagesRequest {
   where: {
     key: {
-      remoteJid: Jid;
+      id?: string;
+      fromMe?: boolean;
+      remoteJid?: string;
+      participants?: string;
+      messageTimestamp?: {
+        lte: string;
+        gte: string;
+      };
     };
   };
+  page?: number;
+  offset?: number;
 }
 
 export interface ResponseMessage {
