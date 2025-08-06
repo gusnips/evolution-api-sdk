@@ -21,6 +21,10 @@ export type {
   FindStatusMessageOptions,
   FindStatusMessageResponse,
 } from "./find-status-message";
+export type {
+  GetBase64FromMediaMessageRequest,
+  GetBase64FromMediaMessageResponse,
+} from "./get-base64-from-media-message";
 export type { MarkAsReadOptions, MarkAsReadResponse } from "./mark-as-read";
 export type { PresenceOptions, PresenceParams } from "./presence";
 export type {

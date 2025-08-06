@@ -230,6 +230,26 @@ await client.chats.updateMessage({
   id: "message-id",
   text: "Updated message",
 });
+
+// Get base64 from media message
+const mediaBase64 = await client.chats.getBase64FromMediaMessage({
+  message: {
+    key: {
+      id: "message-id",
+    },
+  },
+  convertToMp4: true, // Optional: Convert video to MP4
+});
+
+// Response format:
+// {
+//   "mediaType": "audioMessage",
+//   "fileName": "3A3B333C3EC7505284A8.oga",
+//   "size": {"fileLength": "7905"},
+//   "mimetype": "audio/mp4",
+//   "base64": "AAAAIGZ0eXBpc2....=",
+//   "buffer": null
+// }
 ```
 
 #### Contact & Profile

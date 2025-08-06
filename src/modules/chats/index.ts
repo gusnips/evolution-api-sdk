@@ -11,6 +11,7 @@ import type * as FindAll from "./schemas/find-all";
 import type * as FindContacts from "./schemas/find-contacts";
 import type * as FindMessages from "./schemas/find-messages";
 import type * as FindStatusMessage from "./schemas/find-status-message";
+import type * as GetBase64FromMediaMessage from "./schemas/get-base64-from-media-message";
 import type * as MarkAsRead from "./schemas/mark-as-read";
 import type * as MarkAsUnread from "./schemas/mark-as-unread";
 import type * as Presence from "./schemas/presence";
@@ -225,5 +226,22 @@ export class ChatsModule {
     });
 
     return response as UpdateMessage.UpdateMessageResponse;
+  }
+
+  /**
+   * Gets base64 representation of media from a message
+   * @param options - Get base64 from media message options
+   * @param methodOptions - Method-specific options (instance override)
+   */
+  async getBase64FromMediaMessage(
+    options: GetBase64FromMediaMessage.GetBase64FromMediaMessageRequest,
+    methodOptions?: MethodOptions
+  ): Promise<GetBase64FromMediaMessage.GetBase64FromMediaMessageResponse> {
+    const response = await this.api.post(Routes.Chats.GetBase64FromMediaMessage, {
+      body: options,
+      ...methodOptions,
+    });
+
+    return response as GetBase64FromMediaMessage.GetBase64FromMediaMessageResponse;
   }
 }

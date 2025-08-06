@@ -25,6 +25,7 @@ export const Routes = {
     FindMessages: "chat/findMessages",
     FindStatusMessage: "chat/findStatusMessage",
     UpdateMessage: "chat/updateMessage",
+    GetBase64FromMediaMessage: "chat/getBase64FromMediaMessage",
   },
   Groups: {
     FindAll: "group/fetchAllGroups",
