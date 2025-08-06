@@ -47,7 +47,10 @@ export class ChatsModule {
   async findAll(
     methodOptions?: MethodOptions
   ): Promise<FindAll.FindAllChatsResponse> {
-    const response = await this.api.get(Routes.Chats.FindAll, methodOptions);
+    const response = await this.api.post(Routes.Chats.FindAll, {
+      body: {},
+      ...methodOptions,
+    });
 
     return response as FindAll.FindAllChatsResponse;
   }
@@ -237,10 +240,13 @@ export class ChatsModule {
     options: GetBase64FromMediaMessage.GetBase64FromMediaMessageRequest,
     methodOptions?: MethodOptions
   ): Promise<GetBase64FromMediaMessage.GetBase64FromMediaMessageResponse> {
-    const response = await this.api.post(Routes.Chats.GetBase64FromMediaMessage, {
-      body: options,
-      ...methodOptions,
-    });
+    const response = await this.api.post(
+      Routes.Chats.GetBase64FromMediaMessage,
+      {
+        body: options,
+        ...methodOptions,
+      }
+    );
 
     return response as GetBase64FromMediaMessage.GetBase64FromMediaMessageResponse;
   }
