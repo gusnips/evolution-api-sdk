@@ -96,7 +96,7 @@ export type MessageContent = {
   imageMessage?: ImageMessage;
   audioMessage?: AudioMessage;
   stickerMessage?: StickerMessage;
-  ephemeralMessage?: MessageContent;
+  ephemeralMessage?: EphemeralMessage;
 };
 
 export interface MessageUpdate {
@@ -120,9 +120,7 @@ export interface ContactPayload {
 }
 
 export interface EphemeralMessage {
-  message: {
-    extendedTextMessage: ExtendedTextMessage;
-  };
+  message: MessageContent;
 }
 
 export interface MessagePayload {
