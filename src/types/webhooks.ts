@@ -96,7 +96,7 @@ export type MessageContent = {
   imageMessage?: ImageMessage;
   audioMessage?: AudioMessage;
   stickerMessage?: StickerMessage;
-  ephemeralMessage?: EphemeralMessage;
+  ephemeralMessage?: MessageContent;
 };
 
 export interface MessageUpdate {
