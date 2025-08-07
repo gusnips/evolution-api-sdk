@@ -96,6 +96,7 @@ export type MessageContent = {
   imageMessage?: ImageMessage;
   audioMessage?: AudioMessage;
   stickerMessage?: StickerMessage;
+  ephemeralMessage?: EphemeralMessage;
 };
 
 export interface MessageUpdate {
@@ -116,6 +117,12 @@ export interface ContactPayload {
   pushName: string;
   profilePicUrl: string | null;
   instanceId: string;
+}
+
+export interface EphemeralMessage {
+  message: {
+    extendedTextMessage: ExtendedTextMessage;
+  };
 }
 
 export interface MessagePayload {
