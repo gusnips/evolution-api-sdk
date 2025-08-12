@@ -1,6 +1,7 @@
 import { MessageUpdateStatus } from "./messages";
 
 export enum MessageType {
+  CONVERSATION = "conversation",
   TEXT = "textMessage",
   EPHEMERAL = "ephemeralMessage",
   AUDIO = "audioMessage",
