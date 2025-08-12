@@ -1,5 +1,18 @@
 import { MessageUpdateStatus } from "./messages";
 
+export enum MessageType {
+  TEXT = "textMessage",
+  EPHEMERAL = "ephemeralMessage",
+  AUDIO = "audioMessage",
+  IMAGE = "imageMessage",
+  VIDEO = "videoMessage",
+  DOCUMENT = "documentMessage",
+  STICKER = "stickerMessage",
+  CONTACT = "contactMessage",
+  LOCATION = "locationMessage",
+  REACTION = "reactionMessage",
+}
+
 export interface DeviceListMetadata {
   senderKeyHash: string;
   senderTimestamp: string;
@@ -97,6 +110,11 @@ export type MessageContent = {
   audioMessage?: AudioMessage;
   stickerMessage?: StickerMessage;
   ephemeralMessage?: EphemeralMessage;
+  videoMessage?: any;
+  documentMessage?: any;
+  contactMessage?: any;
+  locationMessage?: any;
+  reactionMessage?: any;
 };
 
 export interface MessageUpdate {
@@ -132,7 +150,7 @@ export interface MessagePayload {
   };
   pushName?: string;
   message?: MessageContent;
-  messageType?: string;
+  messageType?: MessageType;
   messageTimestamp?: number;
   status?: string;
   participant?: string;
