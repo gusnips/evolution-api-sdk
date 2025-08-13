@@ -99,6 +99,16 @@ export interface StickerMessage {
   mediaKeyTimestamp: string;
 }
 
+export interface ReactionMessage {
+  key: {
+    remoteJid: string;
+    fromMe: boolean;
+    id: string;
+  };
+  text: string;
+  senderTimestampMs: string;
+}
+
 export interface ExtendedTextMessage {
   text: string;
   contextInfo?: ContextInfo;
@@ -116,7 +126,7 @@ export type MessageContent = {
   documentMessage?: any;
   contactMessage?: any;
   locationMessage?: any;
-  reactionMessage?: any;
+  reactionMessage?: ReactionMessage;
   buttonsMessage?: any;
 };
 
