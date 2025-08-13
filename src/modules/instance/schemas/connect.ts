@@ -1,4 +1,5 @@
 // Pure TypeScript interfaces for better IDE support and performance
+import { ConnectionState } from "@/types/webhooks";
 
 export interface ConnectRequest {
   instanceName: string;
@@ -6,7 +7,7 @@ export interface ConnectRequest {
 
 export interface ConnectInstanceInfo {
   instanceName: string;
-  state: string;
+  state: ConnectionState;
 }
 
 export interface ConnectHash {

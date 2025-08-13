@@ -1,4 +1,5 @@
 import { Jid } from "@/types/tags";
+import { ConnectionState } from "@/types/webhooks";
 
 export interface Setting {
   id: string;
@@ -24,7 +25,7 @@ export interface Count {
 export interface InstanceDetails {
   id: string;
   name: string;
-  connectionStatus: "open" | "close" | "connecting";
+  connectionStatus: ConnectionState;
   ownerJid: Jid;
   profileName: string;
   profilePicUrl: string | null;

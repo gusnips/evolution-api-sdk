@@ -1,5 +1,11 @@
 import { MessageUpdateStatus } from "./messages";
 
+export enum ConnectionState {
+  OPEN = "open",
+  CONNECTING = "connecting",
+  CLOSED = "close",
+}
+
 export enum MessageType {
   CONVERSATION = "conversation",
   TEXT = "textMessage",
@@ -159,7 +165,7 @@ export interface ConnectionUpdatePayload {
   wuid?: string;
   profileName?: string;
   profilePictureUrl?: string | null;
-  state: string;
+  state: ConnectionState;
   statusReason: number;
 }
 
