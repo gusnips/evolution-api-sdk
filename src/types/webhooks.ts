@@ -12,6 +12,7 @@ export enum MessageType {
   CONTACT = "contactMessage",
   LOCATION = "locationMessage",
   REACTION = "reactionMessage",
+  BUTTONS = "buttonsMessage",
 }
 
 export interface DeviceListMetadata {
@@ -116,6 +117,7 @@ export type MessageContent = {
   contactMessage?: any;
   locationMessage?: any;
   reactionMessage?: any;
+  buttonsMessage?: any;
 };
 
 export interface MessageUpdate {
