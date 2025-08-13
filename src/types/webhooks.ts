@@ -124,6 +124,11 @@ export interface DocumentMessage {
   caption: string;
 }
 
+export interface ContactMessage {
+  displayName: string;
+  vcard: string;
+}
+
 export interface ExtendedTextMessage {
   text: string;
   contextInfo?: ContextInfo;
@@ -139,7 +144,7 @@ export type MessageContent = {
   ephemeralMessage?: EphemeralMessage;
   videoMessage?: any;
   documentMessage?: DocumentMessage;
-  contactMessage?: any;
+  contactMessage?: ContactMessage;
   locationMessage?: any;
   reactionMessage?: ReactionMessage;
   buttonsMessage?: any;
