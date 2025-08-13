@@ -109,6 +109,21 @@ export interface ReactionMessage {
   senderTimestampMs: string;
 }
 
+export interface DocumentMessage {
+  url: string;
+  mimetype: string;
+  fileSha256: string;
+  fileLength: string;
+  pageCount: number;
+  mediaKey: string;
+  fileName: string;
+  fileEncSha256: string;
+  directPath: string;
+  mediaKeyTimestamp: string;
+  contextInfo: ContextInfo;
+  caption: string;
+}
+
 export interface ExtendedTextMessage {
   text: string;
   contextInfo?: ContextInfo;
@@ -123,7 +138,7 @@ export type MessageContent = {
   stickerMessage?: StickerMessage;
   ephemeralMessage?: EphemeralMessage;
   videoMessage?: any;
-  documentMessage?: any;
+  documentMessage?: DocumentMessage;
   contactMessage?: any;
   locationMessage?: any;
   reactionMessage?: ReactionMessage;
