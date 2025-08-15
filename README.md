@@ -219,8 +219,13 @@ await client.chats.deleteMessage({
 
 // Find messages
 const messages = await client.chats.findMessages({
-  remoteJid: "5511999999999@s.whatsapp.net",
-  limit: 50,
+  where: {
+    key: {
+      remoteJid: "5511999999999@s.whatsapp.net",
+    },
+  },
+  offset: 10, // limit
+  page: 1,
 });
 
 // Update message
