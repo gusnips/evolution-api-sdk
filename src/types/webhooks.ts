@@ -4,6 +4,7 @@ export enum ConnectionState {
   OPEN = "open",
   CONNECTING = "connecting",
   CLOSED = "close",
+  REFUSED = "refused",
 }
 
 export enum MessageType {
