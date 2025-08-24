@@ -2,11 +2,11 @@
 export interface SetRequest {
   rejectCall?: boolean;
   msgCall?: string;
-  groupsIgnore?: boolean;
-  alwaysOnline?: boolean;
-  readMessages?: boolean;
-  readStatus?: boolean;
-  syncFullHistory?: boolean;
+  groupsIgnore: boolean; // Required by API
+  alwaysOnline: boolean; // Required by API
+  readMessages: boolean; // Required by API
+  readStatus: boolean; // Required by API
+  syncFullHistory: boolean; // Required by API
   wavoipToken?: string;
 }
 
