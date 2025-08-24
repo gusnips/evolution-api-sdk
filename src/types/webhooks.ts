@@ -51,6 +51,9 @@ export interface ContextInfo {
     conversation?: string;
   };
   statusSourceType?: string;
+  forwardingScore?: number;
+  isForwarded?: boolean;
+  pairedMediaType?: string;
 }
 
 export interface ImageMessage {
@@ -106,6 +109,24 @@ export interface StickerMessage {
   mediaKeyTimestamp: string;
 }
 
+export interface VideoMessage {
+  url: string;
+  mimetype: string;
+  fileSha256: string;
+  fileLength: string;
+  seconds: number;
+  mediaKey: string;
+  height: number;
+  width: number;
+  fileEncSha256: string;
+  directPath: string;
+  mediaKeyTimestamp: string;
+  jpegThumbnail: string;
+  contextInfo?: ContextInfo;
+  streamingSidecar: string;
+  externalShareFullVideoDurationInSeconds: number;
+}
+
 export interface ReactionMessage {
   key: {
     remoteJid: string;
@@ -149,7 +170,7 @@ export type MessageContent = {
   audioMessage?: AudioMessage;
   stickerMessage?: StickerMessage;
   ephemeralMessage?: EphemeralMessage;
-  videoMessage?: any;
+  videoMessage?: VideoMessage;
   documentMessage?: DocumentMessage;
   contactMessage?: ContactMessage;
   locationMessage?: any;
