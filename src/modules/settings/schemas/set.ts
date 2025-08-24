@@ -1,10 +1,13 @@
 // Pure TypeScript interfaces for better IDE support and performance
 export interface SetRequest {
-  reject_call?: boolean;
-  groups_ignore?: boolean;
-  always_online?: boolean;
-  read_messages?: boolean;
-  read_status?: boolean;
+  rejectCall?: boolean;
+  msgCall?: string;
+  groupsIgnore?: boolean;
+  alwaysOnline?: boolean;
+  readMessages?: boolean;
+  readStatus?: boolean;
+  syncFullHistory?: boolean;
+  wavoipToken?: string;
 }
 
 export interface SetResponse {
@@ -12,4 +15,4 @@ export interface SetResponse {
 }
 
 // Backward compatibility aliases
-export type SetOptions = SetRequest; 
+export type SetOptions = SetRequest;
