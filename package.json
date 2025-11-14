@@ -1,8 +1,8 @@
 {
-  "name": "evolution-api-sdk",
+  "name": "sdk-evolution-chatbot",
   "private": false,
-  "version": "0.6.46",
-  "description": "Unofficial SDK for the Evolution Whatsapp API v2",
+  "version": "0.1.0",
+  "description": "SDK for create a chatbot with the Evolution Whatsapp API v2",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "module": "lib/index.mjs",
@@ -41,16 +41,16 @@
     "v2"
   ],
   "author": {
-    "name": "Gustavo Salomé Silva",
-    "url": "https://github.com/gusnips"
+    "name": "Suissa",
+    "url": "https://github.com/suissa"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gusnips/evolution-api-sdk.git"
+    "url": "git+https://github.com/suissa/sdk-evolution-chatbot.git"
   },
   "bugs": {
-    "url": "https://github.com/gusnips/evolution-api-sdk/issues"
+    "url": "https://github.com/suissa/sdk-evolution-chatbot/issues"
   },
-  "homepage": "https://github.com/gusnips/evolution-api-sdk#readme",
+  "homepage": "https://github.com/suissa/sdk-evolution-chatbot#readme",
   "license": "MIT"
 }
