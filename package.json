@@ -1,5 +1,6 @@
 {
   "name": "evolution-api-sdk",
+  "packageManager": "bun@1.4.2",
   "private": false,
   "version": "0.6.46",
   "description": "Unofficial SDK for the Evolution Whatsapp API v2",
