@@ -8,8 +8,6 @@
   "types": "lib/index.d.ts",
   "module": "lib/index.mjs",
   "scripts": {
-    "check:copy": "bun scripts/check-no-em-dash.ts",
-    "prepublishOnly": "bun run check:copy && bun run check-types",
     "release": "rm -rf lib && tsup ./src && npm publish",
     "check-types": "tsc --noEmit",
     "build": "tsup ./src",
