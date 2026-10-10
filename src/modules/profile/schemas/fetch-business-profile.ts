@@ -16,14 +16,31 @@ export interface BusinessHours {
   business_config: BusinessHoursConfig[];
 }
 
-export interface FetchBusinessProfileResponse {
-  isBusiness: boolean;
+export interface BusinessProfile {
+  isBusiness: true;
   wid: string;
   description: string;
   website: string[];
+  email?: string;
+  address?: string;
   category: string;
   business_hours: BusinessHours;
 }
 
+/**
+ * The number is on WhatsApp but has no business profile
+ */
+export interface NotBusinessProfile {
+  isBusiness: false;
+  message: string;
+  exists: boolean;
+  jid: string;
+  number: string;
+  name?: string;
+  lid?: string;
+}
+
+export type FetchBusinessProfileResponse = BusinessProfile | NotBusinessProfile;
+
 // Backward compatibility aliases
-export type FetchBusinessProfileOptions = FetchBusinessProfileRequest; 
+export type FetchBusinessProfileOptions = FetchBusinessProfileRequest;

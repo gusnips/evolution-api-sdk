@@ -3,6 +3,7 @@ import type { ApiService } from "@/api/service";
 import type { MethodOptions } from "@/types/api";
 
 import type * as FetchBusinessProfile from "./schemas/fetch-business-profile";
+import type * as FetchLid from "./schemas/fetch-lid";
 import type * as FetchPrivacySettings from "./schemas/fetch-privacy-settings";
 import type * as FetchProfile from "./schemas/fetch-profile";
 import type * as RemovePicture from "./schemas/remove-picture";
@@ -36,6 +37,23 @@ export class ProfileModule {
     });
 
     return response as FetchProfile.FetchProfileResponse;
+  }
+
+  /**
+   * Finds the LID (WhatsApp's private ID) of a phone number
+   * @param options - The phone number
+   * @param methodOptions - Method-specific options (instance override)
+   */
+  async fetchLid(
+    options: FetchLid.FetchLidRequest,
+    methodOptions?: MethodOptions
+  ): Promise<FetchLid.FetchLidResponse> {
+    const response = await this.api.post(Routes.Profile.FetchLid, {
+      body: options,
+      ...methodOptions,
+    });
+
+    return response as FetchLid.FetchLidResponse;
   }
 
   async updateName(
@@ -100,7 +118,7 @@ export class ProfileModule {
     options: UpdatePrivacySettings.UpdatePrivacySettingsRequest,
     methodOptions?: MethodOptions
   ): Promise<UpdatePrivacySettings.UpdatePrivacySettingsResponse> {
-    const response = await this.api.put(Routes.Profile.UpdatePrivacySettings, {
+    const response = await this.api.post(Routes.Profile.UpdatePrivacySettings, {
       body: options,
       ...methodOptions,
     });
