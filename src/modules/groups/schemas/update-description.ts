@@ -9,6 +9,3 @@ export interface UpdateDescriptionRequest {
 export interface UpdateDescriptionResponse {
   update: "success";
 }
-
-// Backward compatibility aliases
-export type UpdateDescriptionOptions = UpdateDescriptionRequest;

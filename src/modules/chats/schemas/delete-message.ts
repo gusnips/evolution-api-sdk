@@ -9,6 +9,3 @@ export interface DeleteMessageRequest extends MessageKey {
 }
 
 export type DeleteMessageResponse = SentMessage;
-
-// Backward compatibility aliases
-export type DeleteMessageOptions = DeleteMessageRequest;

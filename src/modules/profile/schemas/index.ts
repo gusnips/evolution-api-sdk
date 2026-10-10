@@ -5,7 +5,7 @@ export * from "./fetch-privacy-settings";
 export * from "./remove-picture";
 export * from "./update-name";
 export {
-  type UpdatePictureOptions as UpdateProfilePictureOptions,
+  type UpdatePictureRequest as UpdateProfilePictureRequest,
   type UpdatePictureResponse as UpdateProfilePictureResponse,
 } from "./update-picture";
 export * from "./update-privacy-settings";

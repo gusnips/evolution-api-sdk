@@ -3,6 +3,6 @@ export {
   type WebhookRecord,
 } from "./find";
 export {
-  type SetOptions as SetWebhookOptions,
+  type SetRequest as SetWebhookRequest,
   type SetResponse as SetWebhookResponse,
 } from "./set";

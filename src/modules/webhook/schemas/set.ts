@@ -16,6 +16,3 @@ export interface SetRequest {
 }
 
 export type SetResponse = WebhookRecord;
-
-// Backward compatibility aliases
-export type SetOptions = SetRequest;

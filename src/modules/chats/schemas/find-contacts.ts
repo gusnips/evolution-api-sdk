@@ -28,6 +28,3 @@ export interface Contact {
 }
 
 export type FindContactsResponse = Contact[];
-
-// Backward compatibility aliases
-export type FindContactsOptions = FindContactsRequest;

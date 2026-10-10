@@ -18,6 +18,3 @@ export interface Participant {
 export interface UpdateMembersResponse {
   updateParticipants: Participant[];
 }
-
-// Backward compatibility aliases
-export type UpdateMembersOptions = UpdateMembersRequest;

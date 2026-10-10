@@ -9,6 +9,3 @@ export interface MarkAsReadResponse {
   message: string;
   read: "success";
 }
-
-// Backward compatibility aliases
-export type MarkAsReadOptions = MarkAsReadRequest;

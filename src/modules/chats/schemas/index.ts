@@ -1,12 +1,12 @@
-export type { ArchiveOptions, ArchiveResponse } from "./archive";
+export type { ArchiveRequest, ArchiveResponse } from "./archive";
 export type { CheckOptions, CheckResponse } from "./check";
 export type { LastMessage, MessageKey, SentMessage } from "./common";
 export type {
-  DeleteMessageOptions,
+  DeleteMessageRequest,
   DeleteMessageResponse,
 } from "./delete-message";
 export type {
-  FetchProfilePictureOptions,
+  FetchProfilePictureRequest,
   FetchProfilePictureResponse,
 } from "./fetch-profile-picture";
 export type { FindAllChatsResponse } from "./find-all";
@@ -19,15 +19,15 @@ export type {
   FindChatByRemoteJidResponse,
 } from "./find-chat-by-remote-jid";
 export type {
-  FindContactsOptions,
+  FindContactsRequest,
   FindContactsResponse,
 } from "./find-contacts";
 export type {
-  FindMessagesOptions,
+  FindMessagesRequest,
   FindMessagesResponse,
 } from "./find-messages";
 export type {
-  FindStatusMessageOptions,
+  FindStatusMessageRequest,
   FindStatusMessageResponse,
 } from "./find-status-message";
 export type {
@@ -39,7 +39,7 @@ export type {
   MarkAsPlayedRequest,
   MarkAsPlayedResponse,
 } from "./mark-as-played";
-export type { MarkAsReadOptions, MarkAsReadResponse } from "./mark-as-read";
+export type { MarkAsReadRequest, MarkAsReadResponse } from "./mark-as-read";
 export type {
   MarkAsUnreadRequest,
   MarkAsUnreadResponse,
@@ -54,6 +54,6 @@ export type {
   UpdateBlockStatusResponse,
 } from "./update-block-status";
 export type {
-  UpdateMessageOptions,
+  UpdateMessageRequest,
   UpdateMessageResponse,
 } from "./update-message";

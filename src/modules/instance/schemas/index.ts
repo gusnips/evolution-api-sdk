@@ -5,4 +5,4 @@ export * from "./delete";
 export * from "./fetch-all";
 export * from "./logout";
 export * from "./restart";
-export * from "./set-presence"; 
+export * from "./set-presence";

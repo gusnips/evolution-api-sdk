@@ -12,6 +12,3 @@ export interface FetchProfilePictureResponse {
    */
   profilePictureUrl: string | null;
 }
-
-// Backward compatibility aliases
-export type FetchProfilePictureOptions = FetchProfilePictureRequest;

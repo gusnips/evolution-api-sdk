@@ -12,6 +12,3 @@ export interface UpdateMessageRequest {
 }
 
 export type UpdateMessageResponse = SentMessage;
-
-// Backward compatibility aliases
-export type UpdateMessageOptions = UpdateMessageRequest;

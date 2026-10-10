@@ -32,6 +32,3 @@ export interface InstanceErrorResponse {
  */
 export type ConnectResponse =
   QrCodeResponse | ConnectionStateResponse | InstanceErrorResponse;
-
-// Backward compatibility aliases
-export type ConnectOptions = ConnectRequest;

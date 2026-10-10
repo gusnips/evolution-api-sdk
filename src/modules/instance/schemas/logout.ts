@@ -12,6 +12,3 @@ export interface LogoutResponse {
     message: string;
   };
 }
-
-// Backward compatibility aliases
-export type LogoutOptions = LogoutRequest;

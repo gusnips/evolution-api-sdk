@@ -16,6 +16,3 @@ export interface CreateGroupRequest {
 }
 
 export type CreateGroupResponse = GroupMetadataResponse;
-
-// Backward compatibility aliases
-export type CreateGroupOptions = CreateGroupRequest;

@@ -11,6 +11,3 @@ export interface ConnectionStateResponse {
     state: ConnectionState;
   };
 }
-
-// Backward compatibility aliases
-export type ConnectionStateOptions = ConnectionStateRequest;

@@ -14,6 +14,3 @@ export interface SendGroupInviteResponse {
   send: true;
   inviteUrl: string;
 }
-
-// Backward compatibility aliases
-export type SendGroupInviteOptions = SendGroupInviteRequest;

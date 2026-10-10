@@ -9,6 +9,3 @@ export interface FetchInviteCodeResponse {
   inviteUrl: string;
   inviteCode: string;
 }
-
-// Backward compatibility aliases
-export type FetchInviteCodeOptions = FetchInviteCodeRequest;

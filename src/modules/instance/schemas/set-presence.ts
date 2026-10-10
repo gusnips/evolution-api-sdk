@@ -9,6 +9,3 @@ export interface SetPresenceRequest {
 export interface SetPresenceResponse {
   presence: InstancePresence;
 }
-
-// Backward compatibility aliases
-export type SetPresenceOptions = SetPresenceRequest;

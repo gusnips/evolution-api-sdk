@@ -1,5 +1,5 @@
 export type {
-  AcceptInviteCodeOptions,
+  AcceptInviteCodeRequest,
   AcceptInviteCodeResponse,
 } from "./accept-invite-code";
 export type {
@@ -8,9 +8,9 @@ export type {
   GroupWithParticipantsResponse,
   ParticipantResponse,
 } from "./common";
-export type { CreateGroupOptions, CreateGroupResponse } from "./create";
+export type { CreateGroupRequest, CreateGroupResponse } from "./create";
 export type {
-  FetchInviteCodeOptions,
+  FetchInviteCodeRequest,
   FetchInviteCodeResponse,
 } from "./fetch-invite-code";
 export type {
@@ -19,22 +19,22 @@ export type {
 } from "./find-all";
 export type { FindGroupByInviteCodeResponse } from "./find-by-invite-code";
 export type { FindGroupByJidResponse } from "./find-by-jid";
-export type { FindMembersOptions, FindMembersResponse } from "./find-members";
-export type { LeaveOptions, LeaveResponse } from "./leave";
+export type { FindMembersRequest, FindMembersResponse } from "./find-members";
+export type { LeaveRequest, LeaveResponse } from "./leave";
 export type {
-  RevokeInviteCodeOptions,
+  RevokeInviteCodeRequest,
   RevokeInviteCodeResponse,
 } from "./revoke-invite-code";
 export type {
-  SendGroupInviteOptions,
+  SendGroupInviteRequest,
   SendGroupInviteResponse,
 } from "./send-group-invite";
 export type {
-  ToggleEphemeralOptions,
+  ToggleEphemeralRequest,
   ToggleEphemeralResponse,
 } from "./toggle-ephemeral";
 export type {
-  UpdateDescriptionOptions,
+  UpdateDescriptionRequest,
   UpdateDescriptionResponse,
 } from "./update-description";
 export type {
@@ -42,18 +42,18 @@ export type {
   UpdateMemberAddModeResponse,
 } from "./update-member-add-mode";
 export type {
-  UpdateMembersOptions,
+  UpdateMembersRequest,
   UpdateMembersResponse,
 } from "./update-members";
 export type {
-  UpdatePictureOptions as UpdateGroupPictureOptions,
+  UpdatePictureRequest as UpdateGroupPictureRequest,
   UpdatePictureResponse as UpdateGroupPictureResponse,
 } from "./update-picture";
 export type {
-  UpdateSettingOptions,
+  UpdateSettingRequest,
   UpdateSettingResponse,
 } from "./update-setting";
 export type {
-  UpdateSubjectOptions,
+  UpdateSubjectRequest,
   UpdateSubjectResponse,
 } from "./update-subject";

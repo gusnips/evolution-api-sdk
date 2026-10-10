@@ -12,6 +12,3 @@ export interface ToggleEphemeralRequest {
 export interface ToggleEphemeralResponse {
   success: true;
 }
-
-// Backward compatibility aliases
-export type ToggleEphemeralOptions = ToggleEphemeralRequest;

@@ -9,6 +9,3 @@ export interface LeaveResponse {
   groupJid: GroupJid;
   leave: true;
 }
-
-// Backward compatibility aliases
-export type LeaveOptions = LeaveRequest;

@@ -15,6 +15,3 @@ export interface SetResponse {
     settings: SetRequest;
   };
 }
-
-// Backward compatibility aliases
-export type SetOptions = SetRequest;

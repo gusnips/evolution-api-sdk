@@ -14,6 +14,3 @@ export interface Member extends ParticipantResponse {
 export interface FindMembersResponse {
   participants: Member[];
 }
-
-// Backward compatibility aliases
-export type FindMembersOptions = FindMembersRequest;

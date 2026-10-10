@@ -18,6 +18,3 @@ export interface FetchProfileResponse {
   description?: string;
   website?: string;
 }
-
-// Backward compatibility aliases
-export type FetchProfileOptions = FetchProfileRequest;

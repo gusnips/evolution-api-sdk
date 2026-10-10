@@ -10,6 +10,3 @@ export interface UpdatePrivacySettingsResponse {
   update: "success";
   data: PrivacySettings;
 }
-
-// Backward compatibility aliases
-export type UpdatePrivacySettingsOptions = UpdatePrivacySettingsRequest;

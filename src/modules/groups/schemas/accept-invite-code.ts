@@ -9,6 +9,3 @@ export interface AcceptInviteCodeResponse {
   accepted: true;
   groupJid: GroupJid;
 }
-
-// Backward compatibility aliases
-export type AcceptInviteCodeOptions = AcceptInviteCodeRequest;

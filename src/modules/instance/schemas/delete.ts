@@ -9,6 +9,3 @@ export interface DeleteResponse {
     message: string;
   };
 }
-
-// Backward compatibility aliases
-export type DeleteOptions = DeleteRequest;

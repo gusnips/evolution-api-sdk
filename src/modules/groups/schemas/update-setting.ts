@@ -15,6 +15,3 @@ export interface UpdateSettingRequest {
 export interface UpdateSettingResponse {
   updateSetting?: unknown;
 }
-
-// Backward compatibility aliases
-export type UpdateSettingOptions = UpdateSettingRequest;

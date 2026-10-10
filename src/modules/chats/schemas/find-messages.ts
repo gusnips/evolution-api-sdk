@@ -58,7 +58,3 @@ export interface FindMessagesResponse {
     records: ResponseMessage[];
   };
 }
-
-// Backward compatibility aliases
-export type FindMessagesOptions = FindMessagesRequest;
-export type Message = ResponseMessage;

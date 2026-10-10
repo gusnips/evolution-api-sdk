@@ -41,6 +41,3 @@ export interface NotBusinessProfile {
 }
 
 export type FetchBusinessProfileResponse = BusinessProfile | NotBusinessProfile;
-
-// Backward compatibility aliases
-export type FetchBusinessProfileOptions = FetchBusinessProfileRequest;

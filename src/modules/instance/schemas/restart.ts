@@ -12,6 +12,3 @@ export type RestartResponse =
       };
     }
   | InstanceErrorResponse;
-
-// Backward compatibility aliases
-export type RestartOptions = RestartRequest;

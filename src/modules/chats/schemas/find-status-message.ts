@@ -26,6 +26,3 @@ export interface StatusMessage {
 }
 
 export type FindStatusMessageResponse = StatusMessage[];
-
-// Backward compatibility aliases
-export type FindStatusMessageOptions = FindStatusMessageRequest;

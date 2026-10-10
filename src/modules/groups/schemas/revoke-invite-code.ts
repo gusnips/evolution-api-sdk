@@ -12,6 +12,3 @@ export interface RevokeInviteCodeResponse {
    */
   inviteCode?: string;
 }
-
-// Backward compatibility aliases
-export type RevokeInviteCodeOptions = RevokeInviteCodeRequest;

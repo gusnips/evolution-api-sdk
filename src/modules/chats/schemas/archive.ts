@@ -14,6 +14,3 @@ export interface ArchiveResponse {
   chatId: string;
   archived: boolean;
 }
-
-// Backward compatibility aliases
-export type ArchiveOptions = ArchiveRequest;

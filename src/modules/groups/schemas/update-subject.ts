@@ -9,6 +9,3 @@ export interface UpdateSubjectRequest {
 export interface UpdateSubjectResponse {
   update: "success";
 }
-
-// Backward compatibility aliases
-export type UpdateSubjectOptions = UpdateSubjectRequest;

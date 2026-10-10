@@ -198,7 +198,7 @@ export type MessageContent = {
   pollCreationMessageV3?: PollCreationMessage;
   listMessage?: Record<string, unknown>;
   interactiveMessage?: Record<string, unknown>;
-  buttonsMessage?: any;
+  buttonsMessage?: Record<string, unknown>;
 };
 
 export interface MessageUpdate {
