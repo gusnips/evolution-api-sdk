@@ -2,8 +2,10 @@
 import type { Media } from "@/schemas/common";
 import type { BaseMessageOptions } from "./base";
 
+/**
+ * The send method sets `mediatype`, so callers never pass it
+ */
 export interface MediaMessageOptions extends BaseMessageOptions {
-  mediatype: "audio" | "image" | "video" | "document";
   mimetype?: string;
   caption?: string;
   /**

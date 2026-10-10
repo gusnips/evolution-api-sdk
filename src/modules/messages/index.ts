@@ -30,7 +30,7 @@ export class MessagesModule {
    */
   async sendText(
     options: Text.TextMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Text.TextMessageResponse> {
     const response = await this.api.post(Routes.Message.SendText, {
       body: options,
@@ -47,11 +47,10 @@ export class MessagesModule {
    */
   async sendImage(
     options: Image.ImageMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Image.ImageMessageResponse> {
-    options.mediatype = "image";
     const response = await this.api.post(Routes.Message.SendMedia, {
-      body: options,
+      body: { ...options, mediatype: "image" },
       ...methodOptions,
     });
 
@@ -65,11 +64,10 @@ export class MessagesModule {
    */
   async sendVideo(
     options: Video.VideoMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Video.VideoMessageResponse> {
-    options.mediatype = "video";
     const response = await this.api.post(Routes.Message.SendMedia, {
-      body: options,
+      body: { ...options, mediatype: "video" },
       ...methodOptions,
     });
 
@@ -83,11 +81,10 @@ export class MessagesModule {
    */
   async sendDocument(
     options: Document.DocumentMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Document.DocumentMessageResponse> {
-    options.mediatype = "document";
     const response = await this.api.post(Routes.Message.SendMedia, {
-      body: options,
+      body: { ...options, mediatype: "document" },
       ...methodOptions,
     });
 
@@ -101,11 +98,10 @@ export class MessagesModule {
    */
   async sendAudio(
     options: Audio.AudioMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Audio.AudioMessageResponse> {
-    options.mediatype = "audio";
     const response = await this.api.post(Routes.Message.SendMedia, {
-      body: options,
+      body: { ...options, mediatype: "audio" },
       ...methodOptions,
     });
 
@@ -119,7 +115,7 @@ export class MessagesModule {
    */
   async sendVoice(
     options: Voice.VoiceMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Voice.VoiceMessageResponse> {
     const response = await this.api.post(Routes.Message.SendVoice, {
       body: options,
@@ -136,7 +132,7 @@ export class MessagesModule {
    */
   async sendPtv(
     options: Ptv.PtvMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Ptv.PtvMessageResponse> {
     const response = await this.api.post(Routes.Message.SendPtv, {
       body: options,
@@ -153,7 +149,7 @@ export class MessagesModule {
    */
   async sendSticker(
     options: Sticker.StickerMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Sticker.StickerMessageResponse> {
     const response = await this.api.post(Routes.Message.SendSticker, {
       body: options,
@@ -170,7 +166,7 @@ export class MessagesModule {
    */
   async sendLocation(
     options: Location.LocationMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Location.LocationMessageResponse> {
     const response = await this.api.post(Routes.Message.SendLocation, {
       body: options,
@@ -187,7 +183,7 @@ export class MessagesModule {
    */
   async sendContact(
     options: Contact.ContactMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Contact.ContactMessageResponse> {
     const response = await this.api.post(Routes.Message.SendContact, {
       body: options,
@@ -204,7 +200,7 @@ export class MessagesModule {
    */
   async sendPoll(
     options: Poll.PollMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Poll.PollMessageResponse> {
     const response = await this.api.post(Routes.Message.SendPoll, {
       body: options,
@@ -221,7 +217,7 @@ export class MessagesModule {
    */
   async sendReaction(
     options: Reaction.ReactionMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Reaction.ReactionMessageResponse> {
     const response = await this.api.post(Routes.Message.SendReaction, {
       body: options,
@@ -238,7 +234,7 @@ export class MessagesModule {
    */
   async sendTemplate(
     options: Template.TemplateMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Template.TemplateMessageResponse> {
     const response = await this.api.post(Routes.Message.SendTemplate, {
       body: options,
@@ -255,7 +251,7 @@ export class MessagesModule {
    */
   async sendStatus(
     options: Status.StatusMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Status.StatusMessageResponse> {
     const response = await this.api.post(Routes.Message.SendStatus, {
       body: options,
@@ -272,7 +268,7 @@ export class MessagesModule {
    */
   async sendList(
     options: List.ListMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<List.ListMessageResponse> {
     const response = await this.api.post(Routes.Message.SendList, {
       body: options,
@@ -289,7 +285,7 @@ export class MessagesModule {
    */
   async sendButtons(
     options: Buttons.ButtonsMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Buttons.ButtonsMessageResponse> {
     const response = await this.api.post(Routes.Message.SendButtons, {
       body: options,
@@ -306,7 +302,7 @@ export class MessagesModule {
    */
   async sendCarousel(
     options: Carousel.CarouselMessageOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Carousel.CarouselMessageResponse> {
     const response = await this.api.post(Routes.Message.SendCarousel, {
       body: options,
