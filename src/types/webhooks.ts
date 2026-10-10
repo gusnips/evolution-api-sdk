@@ -221,6 +221,16 @@ export interface ContactPayload {
   instanceId: string;
 }
 
+/**
+ * Sent once, when the history sync reaches 100%
+ */
+export interface MessagingHistorySetPayload {
+  messageCount: number;
+  chatCount: number;
+  contactCount: number;
+  progress: number;
+}
+
 export interface EphemeralMessage {
   message: MessageContent;
 }
@@ -250,7 +260,8 @@ export interface WebhookData {
     | MessagePayload
     | ContactPayload
     | ContactPayload[]
-    | ConnectionUpdatePayload;
+    | ConnectionUpdatePayload
+    | MessagingHistorySetPayload;
   sender: string;
   date?: number;
   instanceName?: string;
