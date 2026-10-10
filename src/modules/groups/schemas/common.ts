@@ -1,89 +1,40 @@
 // Pure TypeScript interfaces for better IDE support and performance
-import { GroupJid, Jid } from "@/types/tags";
-import { phoneNumberFromJid } from "@/utils/phone-numer-from-jid";
-
-// Raw response interfaces from API
-export interface GroupResponseRaw {
-	id: string;
-	subject: string;
-	subjectOwner: string;
-	subjectTime: string | Date;
-	pictureUrl?: string | null;
-	size: number;
-	creation: string | Date;
-	owner: string;
-	restrict: boolean;
-	announce: boolean;
-}
-
-export interface ParticipantResponseRaw {
-	id: string;
-	admin?: "admin" | "superadmin" | null;
-}
-
-export interface GroupWithParticipantsResponseRaw extends GroupResponseRaw {
-	participants: ParticipantResponseRaw[];
-}
-
-// Transformed response interfaces
-export interface GroupResponse {
-	jid: GroupJid;
-	name: string;
-	pictureUrl?: string;
-	size: number;
-	subject: {
-		owner: Jid;
-		time: Date;
-	};
-	owner: {
-		jid: Jid;
-		phoneNumber: string;
-	};
-	createdAt: Date;
-	restrict: boolean;
-	announce: boolean;
-}
+import type { GroupJid } from "@/types/tags";
 
 export interface ParticipantResponse {
-	id: string;
-	role: "admin" | "superadmin" | "member";
+  id: string;
+  phoneNumber?: string;
+  lid?: string;
+  admin?: "admin" | "superadmin" | null;
+}
+
+export interface GroupResponse {
+  id: GroupJid;
+  subject: string;
+  subjectOwner?: string;
+  subjectTime?: number;
+  pictureUrl: string | null;
+  size: number;
+  creation?: number;
+  owner?: string;
+  desc?: string;
+  descId?: string;
+  restrict?: boolean;
+  announce?: boolean;
+  isCommunity?: boolean;
+  isCommunityAnnounce?: boolean;
+  linkedParent?: string;
 }
 
 export interface GroupWithParticipantsResponse extends GroupResponse {
-	participants: ParticipantResponse[];
+  participants: ParticipantResponse[];
 }
 
-// Transform functions
-export const GroupResponseSchemaTransform = (
-	group: GroupResponseRaw,
-): GroupResponse => ({
-	jid: GroupJid(group.id),
-	name: group.subject,
-	pictureUrl: group.pictureUrl || undefined,
-	size: group.size,
-	subject: {
-		owner: Jid(group.subjectOwner),
-		time: new Date(group.subjectTime),
-	},
-	owner: {
-		jid: Jid(group.owner),
-		phoneNumber: phoneNumberFromJid(group.owner),
-	},
-	createdAt: new Date(group.creation),
-	restrict: group.restrict,
-	announce: group.announce,
-});
-
-export const ParticipantResponseSchemaTransform = (
-	participant: ParticipantResponseRaw,
-): ParticipantResponse => ({
-	id: participant.id,
-	role: participant.admin || ("member" as const),
-});
-
-export const GroupWithParticipantsResponseSchemaTransform = (
-	group: GroupWithParticipantsResponseRaw,
-): GroupWithParticipantsResponse => ({
-	...GroupResponseSchemaTransform(group),
-	participants: group.participants.map(ParticipantResponseSchemaTransform),
-});
+/**
+ * Group as WhatsApp reports it. It has no picture
+ */
+export interface GroupMetadataResponse
+  extends Omit<GroupWithParticipantsResponse, "pictureUrl"> {
+  joinApprovalMode?: boolean;
+  memberAddMode?: boolean;
+}

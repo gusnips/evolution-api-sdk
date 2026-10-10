@@ -1,16 +1,19 @@
 // Pure TypeScript interfaces for better IDE support and performance
-import type { GroupJid, Jid } from "@/types/tags";
+import type { GroupJid } from "@/types/tags";
+import type { ParticipantResponse } from "./common";
 
 export interface FindMembersRequest {
   groupJid: GroupJid;
 }
 
-export interface Member {
-  id: Jid;
-  admin: string | null;
+export interface Member extends ParticipantResponse {
+  name?: string;
+  imgUrl?: string | null;
 }
 
-export type FindMembersResponse = Member[];
+export interface FindMembersResponse {
+  participants: Member[];
+}
 
 // Backward compatibility aliases
-export type FindMembersOptions = FindMembersRequest; 
+export type FindMembersOptions = FindMembersRequest;

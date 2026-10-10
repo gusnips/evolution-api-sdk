@@ -1,14 +1,14 @@
 // Pure TypeScript interfaces for better IDE support and performance
-import type { GroupInviteCode } from "@/types/tags";
+import type { GroupInviteCode, GroupJid } from "@/types/tags";
 
 export interface AcceptInviteCodeRequest {
   inviteCode: GroupInviteCode;
 }
 
 export interface AcceptInviteCodeResponse {
-  status: string;
-  gid: string;
+  accepted: true;
+  groupJid: GroupJid;
 }
 
 // Backward compatibility aliases
-export type AcceptInviteCodeOptions = AcceptInviteCodeRequest; 
+export type AcceptInviteCodeOptions = AcceptInviteCodeRequest;

@@ -1,5 +1,6 @@
 export type { AcceptInviteCodeOptions, AcceptInviteCodeResponse } from "./accept-invite-code";
 export type {
+	GroupMetadataResponse,
 	GroupResponse,
 	GroupWithParticipantsResponse,
 	ParticipantResponse,
@@ -18,6 +19,7 @@ export type { RevokeInviteCodeOptions, RevokeInviteCodeResponse } from "./revoke
 export type { SendGroupInviteOptions, SendGroupInviteResponse } from "./send-group-invite";
 export type { ToggleEphemeralOptions, ToggleEphemeralResponse } from "./toggle-ephemeral";
 export type { UpdateDescriptionOptions, UpdateDescriptionResponse } from "./update-description";
+export type { UpdateMemberAddModeRequest, UpdateMemberAddModeResponse } from "./update-member-add-mode";
 export type { UpdateMembersOptions, UpdateMembersResponse } from "./update-members";
 export type { UpdatePictureOptions as UpdateGroupPictureOptions, UpdatePictureResponse as UpdateGroupPictureResponse } from "./update-picture";
 export type { UpdateSettingOptions, UpdateSettingResponse } from "./update-setting";

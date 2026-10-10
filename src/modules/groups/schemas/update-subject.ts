@@ -7,9 +7,8 @@ export interface UpdateSubjectRequest {
 }
 
 export interface UpdateSubjectResponse {
-  status: string;
-  message: string;
+  update: "success";
 }
 
 // Backward compatibility aliases
-export type UpdateSubjectOptions = UpdateSubjectRequest; 
+export type UpdateSubjectOptions = UpdateSubjectRequest;

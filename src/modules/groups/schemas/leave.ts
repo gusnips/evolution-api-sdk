@@ -6,9 +6,9 @@ export interface LeaveRequest {
 }
 
 export interface LeaveResponse {
-  status: string;
-  message: string;
+  groupJid: GroupJid;
+  leave: true;
 }
 
 // Backward compatibility aliases
-export type LeaveOptions = LeaveRequest; 
+export type LeaveOptions = LeaveRequest;

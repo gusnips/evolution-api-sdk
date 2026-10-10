@@ -15,6 +15,7 @@ import type * as RevokeInviteCode from "./schemas/revoke-invite-code";
 import type * as SendGroupInvite from "./schemas/send-group-invite";
 import type * as ToggleEphemeral from "./schemas/toggle-ephemeral";
 import type * as UpdateDescription from "./schemas/update-description";
+import type * as UpdateMemberAddMode from "./schemas/update-member-add-mode";
 import type * as UpdateMembers from "./schemas/update-members";
 import type * as UpdatePicture from "./schemas/update-picture";
 import type * as UpdateSetting from "./schemas/update-setting";
@@ -152,8 +153,8 @@ export class GroupsModule {
     options: AcceptInviteCode.AcceptInviteCodeRequest,
     methodOptions?: MethodOptions
   ): Promise<AcceptInviteCode.AcceptInviteCodeResponse> {
-    const response = await this.api.post(Routes.Groups.AcceptInviteCode, {
-      body: options,
+    const response = await this.api.get(Routes.Groups.AcceptInviteCode, {
+      params: options,
       ...methodOptions,
     });
 
@@ -220,6 +221,18 @@ export class GroupsModule {
     return response as UpdateSetting.UpdateSettingResponse;
   }
 
+  async updateMemberAddMode(
+    options: UpdateMemberAddMode.UpdateMemberAddModeRequest,
+    methodOptions?: MethodOptions
+  ): Promise<UpdateMemberAddMode.UpdateMemberAddModeResponse> {
+    const response = await this.api.post(Routes.Groups.UpdateMemberAddMode, {
+      body: options,
+      ...methodOptions,
+    });
+
+    return response as UpdateMemberAddMode.UpdateMemberAddModeResponse;
+  }
+
   async toggleEphemeral(
     options: ToggleEphemeral.ToggleEphemeralRequest,
     methodOptions?: MethodOptions
@@ -236,8 +249,8 @@ export class GroupsModule {
     options: Leave.LeaveRequest,
     methodOptions?: MethodOptions
   ): Promise<Leave.LeaveResponse> {
-    const response = await this.api.post(Routes.Groups.Leave, {
-      body: options,
+    const response = await this.api.delete(Routes.Groups.Leave, {
+      params: options,
       ...methodOptions,
     });
 

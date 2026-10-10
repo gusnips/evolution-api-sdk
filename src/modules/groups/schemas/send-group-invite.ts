@@ -1,15 +1,19 @@
 // Pure TypeScript interfaces for better IDE support and performance
-import type { GroupJid, Jid } from "@/types/tags";
+import type { GroupJid } from "@/types/tags";
 
 export interface SendGroupInviteRequest {
   groupJid: GroupJid;
-  participantJid: Jid;
+  /**
+   * Text sent before the invite link
+   */
+  description: string;
+  numbers: string[];
 }
 
 export interface SendGroupInviteResponse {
-  status: string;
-  message: string;
+  send: true;
+  inviteUrl: string;
 }
 
 // Backward compatibility aliases
-export type SendGroupInviteOptions = SendGroupInviteRequest; 
+export type SendGroupInviteOptions = SendGroupInviteRequest;
