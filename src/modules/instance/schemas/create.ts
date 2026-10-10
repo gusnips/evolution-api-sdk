@@ -61,7 +61,9 @@ export interface CreateInstanceRequest {
   syncFullHistory?: boolean;
   wavoipToken?: string;
 
-  // Proxy. The server tests it and rejects the request when it fails
+  // Proxy. Set host, port and protocol together, and send an empty string for
+  // the username and password when there is no login. The server tests the
+  // proxy and rejects the request when that fails
   proxyHost?: string;
   proxyPort?: string;
   proxyProtocol?: "http" | "socks" | "socks5";

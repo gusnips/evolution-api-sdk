@@ -2,12 +2,16 @@ export * from "./types/webhooks";
 
 import { ApiService } from "./api/service";
 import {
+  BusinessModule,
   ChatsModule,
   GroupsModule,
   InstanceModule,
+  LabelsModule,
   MessagesModule,
   ProfileModule,
+  ProxyModule,
   SettingsModule,
+  TemplatesModule,
   WebhookModule,
 } from "./modules";
 import { type ClientOptions } from "./schemas/client";
@@ -46,6 +50,22 @@ export class EvolutionClient {
    * Manage settings
    */
   public readonly settings: SettingsModule;
+  /**
+   * Add labels to chats (`WHATSAPP-BAILEYS` only)
+   */
+  public readonly labels: LabelsModule;
+  /**
+   * Set the proxy of an instance
+   */
+  public readonly proxy: ProxyModule;
+  /**
+   * Manage Meta message templates (`WHATSAPP-BUSINESS` only)
+   */
+  public readonly templates: TemplatesModule;
+  /**
+   * Read the catalog and collections of a business account
+   */
+  public readonly business: BusinessModule;
 
   /**
    * Evolution Client - API client for interacting with the Evolution API
@@ -60,6 +80,10 @@ export class EvolutionClient {
     this.profile = new ProfileModule(this.api);
     this.webhook = new WebhookModule(this.api);
     this.settings = new SettingsModule(this.api);
+    this.labels = new LabelsModule(this.api);
+    this.proxy = new ProxyModule(this.api);
+    this.templates = new TemplatesModule(this.api);
+    this.business = new BusinessModule(this.api);
   }
 
   setInstance(instance: string) {
@@ -78,6 +102,10 @@ export type * from "./modules/instance/schemas";
 export type * from "./modules/profile/schemas";
 export type * from "./modules/webhook/schemas";
 export type * from "./modules/settings/schemas";
+export type * from "./modules/labels/schemas";
+export type * from "./modules/proxy/schemas";
+export type * from "./modules/templates/schemas";
+export type * from "./modules/business/schemas";
 export type { ClientOptions };
 
 // API types

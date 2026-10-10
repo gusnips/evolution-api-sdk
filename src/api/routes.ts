@@ -91,9 +91,6 @@ export const Routes = {
     GetCatalog: "business/getCatalog",
     GetCollections: "business/getCollections",
   },
-  Call: {
-    Offer: "call/offer",
-  },
   Instance: {
     Create: "instance/create",
     FetchAll: "instance/fetchInstances",
