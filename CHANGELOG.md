@@ -1,6 +1,6 @@
 # evolution-api-sdk
 
-## Unreleased
+## 0.7.0
 
 The routes, request bodies and response types now follow the Evolution API source (`develop` branch, July 2026). Many calls failed against a real server, and the response types listed fields the SDK never returned. None of this was run against a live server. It was checked against the server source and with `scripts/check-routes.ts`.
 
@@ -11,7 +11,8 @@ The routes, request bodies and response types now follow the Evolution API sourc
 - `settings.set` requires `rejectCall` and returns `{ settings: { instanceName, settings } }`. `settings.find` returns `null` when nothing is saved.
 - `instances.create` requires `integration`. `proxyProtocol` is `http`, `socks` or `socks5`. `chatwootAccountId` is a string. Event channels (`webhook`, `websocket`, `rabbitmq`, `nats`, `sqs`, `pusher`, `kafka`) are objects with an `events` list.
 - `instances.connect` and `instances.restart` return a union, because the server answers 200 with `{ error: true, message }` when they fail.
-- `WebhookEvent.NEW_TOKEN` and the `NEW_TOKEN`, `ERRORS` and `ERRORS_WEBHOOK` setup names are gone. The server has no such events. Subscribe to group changes with `WebhookEventSetup.GROUP_UPDATE` instead of `GROUPS_UPDATE`. `WebhookEvent.GROUP_PARTICIPANTS_UPDATE` is now `group-participants.update`.
+- `WebhookEvent.NEW_TOKEN` and the `NEW_TOKEN`, `ERRORS` and `ERRORS_WEBHOOK` setup names are gone. The server has no such events. `WebhookEventSetup.GROUPS_UPDATE` is now `GROUP_UPDATE`, the only name the server accepts, but the server source never delivers that event (see the README). `WebhookEvent.GROUP_PARTICIPANTS_UPDATE` is now `group-participants.update`.
+- The `*Options` aliases next to the `*Request` types are removed (`SetWebhookOptions` is `SetWebhookRequest`, `ArchiveOptions` is `ArchiveRequest`, and so on). Message options such as `TextMessageOptions` keep their names.
 - `chats.archive` takes `{ chat?, lastMessage?, archive }`. `chats.updateMessage` takes `{ number, key, text }`. The bodies of `markAsRead`, `markAsUnread`, `deleteMessage`, `findContacts`, `findMessages` and `findStatusMessage` changed to what the server validates.
 - `groups.updatePicture` takes `image`, `toggleEphemeral` takes `expiration`, `updateSetting` takes `action`, `sendGroupInvite` takes `description` and `numbers`. `groups.findMembers` returns `{ participants }`.
 - `profile.updatePrivacySettings` takes all six fields at the top level and uses POST. `profile.fetchProfile` returns `status` as a string.
@@ -24,7 +25,8 @@ The routes, request bodies and response types now follow the Evolution API sourc
 
 ### Added
 
-- Modules: `labels`, `proxy`, `templates` and `business`.
+- Modules: `labels`, `proxy`, `templates`, `business`, `license` and the event channels `websocket`, `rabbitmq`, `nats`, `sqs`, `kafka` and `pusher`.
+- `client.license` checks and finishes the activation that Evolution API 2.4 needs before it answers requests.
 - Messages: `sendPoll`, `sendPtv`, `sendButtons` and `sendCarousel`. Every send method takes `quoted`, `mentioned`, `mentionsEveryOne`, `linkPreview` and `messageId`. Video takes `gifPlayback` and `gifAttribution`.
 - Chats: `markAsPlayed`, `updateBlockStatus`, `findChatByRemoteJid`, `findChannels` and `getPollVote`.
 - `groups.updateMemberAddMode` and `profile.fetchLid`.
@@ -35,7 +37,7 @@ The routes, request bodies and response types now follow the Evolution API sourc
 ### Not included
 
 - A `call` module. The server's `call/offer` returns a fixed fake object and starts no call.
-- Chatbot, Chatwoot and message broker routes (Typebot, OpenAI, Dify, RabbitMQ and so on).
+- Chatbot and Chatwoot routes (Typebot, OpenAI, Dify, Flowise, N8N, EvoAI, EvolutionBot and Chatwoot). Chatwoot can still be set when you create an instance.
 
 ## 0.3.0
 

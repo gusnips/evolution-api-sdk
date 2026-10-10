@@ -38,6 +38,27 @@ const client = new EvolutionClient({
 
 The types follow the Evolution API source at its `develop` branch (July 2026, commit `e273b90`), which is newer than the 2.3.7 release. A route or field can be missing on an older server.
 
+### Activating a 2.4 server
+
+Evolution API 2.4 answers no request until the server is activated. Until then, every call fails with status 503. The error message holds the address to open:
+
+> This Evolution API instance is not activated. Open https://your-host/manager/login to activate, or set AUTHENTICATION_API_KEY in your .env with a valid licensing key.
+
+The easiest way is to open that address in a browser and fill in the form. To do it from code, use `client.license`. These three calls work before activation:
+
+```ts
+const { status } = await client.license.status(); // "active" or "inactive"
+
+// Get the address of the registration form
+const registration = await client.license.register();
+if (registration.status === "pending") console.log(registration.register_url);
+
+// When the form is done, the server redirects with ?code=... in the address
+await client.license.activate({ code: "code-from-the-redirect" });
+```
+
+Servers older than 2.4 have no `/license` routes and answer 404.
+
 ## Usage examples
 
 ### Sending a text message
@@ -610,6 +631,32 @@ await client.webhook.set({
 });
 ```
 
+### Event channels
+
+`client.websocket`, `client.rabbitmq`, `client.nats`, `client.sqs`, `client.kafka` and `client.pusher` send the events of an instance somewhere else than a webhook. They all work the same way:
+
+```ts
+await client.rabbitmq.set({
+  enabled: true,
+  events: [WebhookEventSetup.MESSAGES_UPSERT], // [] subscribes to every event
+});
+
+const rabbitmq = await client.rabbitmq.find(); // null when nothing is saved
+
+// Pusher also needs its app details
+await client.pusher.set({
+  enabled: true,
+  events: [],
+  appId: "app-id",
+  key: "key",
+  secret: "secret",
+  cluster: "eu",
+  useTLS: true,
+});
+```
+
+The server has to switch each channel on first (`RABBITMQ_ENABLED=true`, `WEBSOCKET_ENABLED=true` and so on). When it did not, the server answers with an empty body and the SDK throws "Network or parsing error".
+
 ### Labels
 
 `client.labels`. Works on `WHATSAPP-BAILEYS` instances.
@@ -860,13 +907,15 @@ Subscribe with the `WebhookEventSetup` name. The server puts the `WebhookEvent` 
 | `CHATS_UPDATE`              | `chats.update`              | A chat changes                             |
 | `CHATS_DELETE`              | `chats.delete`              | A chat is deleted                          |
 | `GROUPS_UPSERT`             | `groups.upsert`             | A group is added                           |
-| `GROUP_UPDATE`              | `groups.update`             | A group changes                            |
+| `GROUP_UPDATE`              | `groups.update`             | A group changes (see below)                |
 | `GROUP_PARTICIPANTS_UPDATE` | `group-participants.update` | Members are added, removed or promoted     |
 | `LABELS_EDIT`               | `labels.edit`               | A label is edited                          |
 | `LABELS_ASSOCIATION`        | `labels.association`        | A label is added to or removed from a chat |
 | `CALL`                      | `call`                      | A call comes in                            |
 | `TYPEBOT_START`             | `typebot.start`             | A Typebot flow starts                      |
 | `TYPEBOT_CHANGE_STATUS`     | `typebot.change-status`     | A Typebot session changes status           |
+
+The server source (`develop`, July 2026) sends group changes as `groups.update`, which becomes the key `GROUPS_UPDATE`. No subscription list can hold that name, because the server only accepts `GROUP_UPDATE`. So `GROUP_UPDATE` events do not arrive. To follow groups, use `GROUPS_UPSERT` for new groups and `GROUP_PARTICIPANTS_UPDATE` for member changes.
 
 ## API documentation
 
