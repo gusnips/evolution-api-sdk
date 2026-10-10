@@ -111,6 +111,12 @@ export type { ClientOptions };
 // API types
 export { APIRequestInit, MethodOptions } from "./types/api";
 export { MessageUpdateStatus } from "./types/messages";
-export { ChatId, GroupJid, Jid, MessageId } from "./types/tags";
+export {
+  ChatId,
+  GroupInviteCode,
+  GroupJid,
+  Jid,
+  MessageId,
+} from "./types/tags";
 export * from "./types/webhooks";
 export { WebhookEvent, WebhookEventSetup } from "./types/events";
