@@ -39,8 +39,11 @@ export enum WebhookEvent {
 /**
  * The names you subscribe with in `webhook.set` and in the `events` list of
  * `instances.create`. They are the payload names in upper case, with one
- * exception: you subscribe to group changes with `GROUP_UPDATE`, and the
- * payload arrives as `groups.update`
+ * exception: the server accepts `GROUP_UPDATE`, but it sends group changes
+ * as `groups.update`, which becomes `GROUPS_UPDATE`. That name is never in a
+ * subscription list, so in the server source (`develop`, July 2026) group
+ * changes reach no webhook or event channel. `GROUPS_UPSERT` and
+ * `GROUP_PARTICIPANTS_UPDATE` work.
  */
 export enum WebhookEventSetup {
   APPLICATION_STARTUP = "APPLICATION_STARTUP",
