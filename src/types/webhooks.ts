@@ -157,6 +157,24 @@ export interface ContactMessage {
   vcard: string;
 }
 
+export interface ContactsArrayMessage {
+  displayName?: string;
+  contacts: ContactMessage[];
+}
+
+export interface LocationMessage {
+  degreesLatitude: number;
+  degreesLongitude: number;
+  name?: string;
+  address?: string;
+}
+
+export interface PollCreationMessage {
+  name: string;
+  options: { optionName: string }[];
+  selectableOptionsCount: number;
+}
+
 export interface ExtendedTextMessage {
   text: string;
   contextInfo?: ContextInfo;
@@ -171,10 +189,15 @@ export type MessageContent = {
   stickerMessage?: StickerMessage;
   ephemeralMessage?: EphemeralMessage;
   videoMessage?: VideoMessage;
+  ptvMessage?: VideoMessage;
   documentMessage?: DocumentMessage;
   contactMessage?: ContactMessage;
-  locationMessage?: any;
+  contactsArrayMessage?: ContactsArrayMessage;
+  locationMessage?: LocationMessage;
   reactionMessage?: ReactionMessage;
+  pollCreationMessageV3?: PollCreationMessage;
+  listMessage?: Record<string, unknown>;
+  interactiveMessage?: Record<string, unknown>;
   buttonsMessage?: any;
 };
 

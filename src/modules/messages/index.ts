@@ -3,11 +3,15 @@ import type { ApiService } from "@/api/service";
 import type { MethodOptions } from "@/types/api";
 
 import type * as Audio from "./schemas/audio";
+import type * as Buttons from "./schemas/buttons";
+import type * as Carousel from "./schemas/carousel";
 import type * as Contact from "./schemas/contact";
 import type * as Document from "./schemas/document";
 import type * as Image from "./schemas/image";
 import type * as List from "./schemas/list";
 import type * as Location from "./schemas/location";
+import type * as Poll from "./schemas/poll";
+import type * as Ptv from "./schemas/ptv";
 import type * as Reaction from "./schemas/reaction";
 import type * as Status from "./schemas/status";
 import type * as Sticker from "./schemas/sticker";
@@ -126,6 +130,23 @@ export class MessagesModule {
   }
 
   /**
+   * Sends a round video message
+   * @param options - Video note options
+   * @param methodOptions - Method-specific options (instance override)
+   */
+  async sendPtv(
+    options: Ptv.PtvMessageOptions,
+    methodOptions?: MethodOptions
+  ): Promise<Ptv.PtvMessageResponse> {
+    const response = await this.api.post(Routes.Message.SendPtv, {
+      body: options,
+      ...methodOptions,
+    });
+
+    return response as Ptv.PtvMessageResponse;
+  }
+
+  /**
    * Sends a sticker
    * @param options - Sticker message options
    * @param methodOptions - Method-specific options (instance override)
@@ -174,6 +195,23 @@ export class MessagesModule {
     });
 
     return response as Contact.ContactMessageResponse;
+  }
+
+  /**
+   * Sends a poll
+   * @param options - Poll message options
+   * @param methodOptions - Method-specific options (instance override)
+   */
+  async sendPoll(
+    options: Poll.PollMessageOptions,
+    methodOptions?: MethodOptions
+  ): Promise<Poll.PollMessageResponse> {
+    const response = await this.api.post(Routes.Message.SendPoll, {
+      body: options,
+      ...methodOptions,
+    });
+
+    return response as Poll.PollMessageResponse;
   }
 
   /**
@@ -242,5 +280,39 @@ export class MessagesModule {
     });
 
     return response as List.ListMessageResponse;
+  }
+
+  /**
+   * Sends a message with buttons
+   * @param options - Buttons message options
+   * @param methodOptions - Method-specific options (instance override)
+   */
+  async sendButtons(
+    options: Buttons.ButtonsMessageOptions,
+    methodOptions?: MethodOptions
+  ): Promise<Buttons.ButtonsMessageResponse> {
+    const response = await this.api.post(Routes.Message.SendButtons, {
+      body: options,
+      ...methodOptions,
+    });
+
+    return response as Buttons.ButtonsMessageResponse;
+  }
+
+  /**
+   * Sends a carousel of cards
+   * @param options - Carousel message options
+   * @param methodOptions - Method-specific options (instance override)
+   */
+  async sendCarousel(
+    options: Carousel.CarouselMessageOptions,
+    methodOptions?: MethodOptions
+  ): Promise<Carousel.CarouselMessageResponse> {
+    const response = await this.api.post(Routes.Message.SendCarousel, {
+      body: options,
+      ...methodOptions,
+    });
+
+    return response as Carousel.CarouselMessageResponse;
   }
 }

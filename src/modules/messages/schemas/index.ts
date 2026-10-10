@@ -1,5 +1,24 @@
 export type { AudioMessageOptions, AudioMessageResponse } from "./audio";
-export type { BaseMessageOptions } from "./base";
+export type {
+  BaseMessageOptions,
+  QuotedMessage,
+  SentMessageResponse,
+} from "./base";
+export type {
+  Button,
+  ButtonsMessageOptions,
+  ButtonsMessageResponse,
+  CallButton,
+  CopyButton,
+  PixButton,
+  ReplyButton,
+  UrlButton,
+} from "./buttons";
+export type {
+  CarouselCard,
+  CarouselMessageOptions,
+  CarouselMessageResponse,
+} from "./carousel";
 export type {
   ContactMessageOptions,
   ContactMessageResponse,
@@ -16,6 +35,7 @@ export type {
   LocationMessageResponse,
 } from "./location";
 export type { PollMessageOptions, PollMessageResponse } from "./poll";
+export type { PtvMessageOptions, PtvMessageResponse } from "./ptv";
 export type {
   ReactionMessageOptions,
   ReactionMessageResponse,
