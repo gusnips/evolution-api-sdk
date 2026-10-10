@@ -18,6 +18,12 @@ const mounts: Record<string, string> = {
   "routes/business.router.ts": "business",
   "routes/call.router.ts": "call",
   "integrations/event/webhook/webhook.router.ts": "webhook",
+  "integrations/event/websocket/websocket.router.ts": "websocket",
+  "integrations/event/rabbitmq/rabbitmq.router.ts": "rabbitmq",
+  "integrations/event/nats/nats.router.ts": "nats",
+  "integrations/event/sqs/sqs.router.ts": "sqs",
+  "integrations/event/kafka/kafka.router.ts": "kafka",
+  "integrations/event/pusher/pusher.router.ts": "pusher",
 };
 
 const verbs = new Set<string>();
@@ -30,6 +36,14 @@ for (const [file, mount] of Object.entries(mounts)) {
   }
 }
 verbs.add("POST instance/create"); // registered without routerPath()
+
+// The license router is plain express, mounted at /license
+const license = readFileSync(`${upstream}/routes/license.router.ts`, "utf8");
+for (const [, verb, name] of license.matchAll(
+  /router\.(get|post|put|delete|patch)\('\/(\w+)'/g,
+)) {
+  verbs.add(`${verb.toUpperCase()} license/${name}`);
+}
 
 const used = new Set<string>();
 const modules = readdirSync("src/modules", {
@@ -46,6 +60,19 @@ for (const file of modules) {
     ];
     used.add(`${verb.toUpperCase()} ${path ?? `Routes.${group}.${name}`}`);
   }
+}
+
+// EventChannelModule takes its routes as an argument, so read them from Routes
+for (const group of [
+  "Websocket",
+  "Rabbitmq",
+  "Nats",
+  "Sqs",
+  "Kafka",
+  "Pusher",
+] as const) {
+  used.add(`POST ${Routes[group].Set}`);
+  used.add(`GET ${Routes[group].Find}`);
 }
 
 const missing = [...used].filter((r) => !verbs.has(r));

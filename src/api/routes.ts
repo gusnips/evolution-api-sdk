@@ -91,6 +91,35 @@ export const Routes = {
     GetCatalog: "business/getCatalog",
     GetCollections: "business/getCollections",
   },
+  Websocket: {
+    Set: "websocket/set",
+    Find: "websocket/find",
+  },
+  Rabbitmq: {
+    Set: "rabbitmq/set",
+    Find: "rabbitmq/find",
+  },
+  Nats: {
+    Set: "nats/set",
+    Find: "nats/find",
+  },
+  Sqs: {
+    Set: "sqs/set",
+    Find: "sqs/find",
+  },
+  Kafka: {
+    Set: "kafka/set",
+    Find: "kafka/find",
+  },
+  Pusher: {
+    Set: "pusher/set",
+    Find: "pusher/find",
+  },
+  License: {
+    Status: "license/status",
+    Register: "license/register",
+    Activate: "license/activate",
+  },
   Instance: {
     Create: "instance/create",
     FetchAll: "instance/fetchInstances",

@@ -1,12 +1,15 @@
 export * from "./types/webhooks";
 
+import { Routes } from "./api/routes";
 import { ApiService } from "./api/service";
 import {
   BusinessModule,
   ChatsModule,
+  EventChannelModule,
   GroupsModule,
   InstanceModule,
   LabelsModule,
+  LicenseModule,
   MessagesModule,
   ProfileModule,
   ProxyModule,
@@ -14,6 +17,10 @@ import {
   TemplatesModule,
   WebhookModule,
 } from "./modules";
+import type {
+  PusherRecord,
+  SetPusherRequest,
+} from "./modules/event-channels/schemas";
 import { type ClientOptions } from "./schemas/client";
 
 export class EvolutionClient {
@@ -66,6 +73,34 @@ export class EvolutionClient {
    * Read the catalog and collections of a business account
    */
   public readonly business: BusinessModule;
+  /**
+   * Send the events of an instance to a WebSocket
+   */
+  public readonly websocket: EventChannelModule;
+  /**
+   * Send the events of an instance to RabbitMQ
+   */
+  public readonly rabbitmq: EventChannelModule;
+  /**
+   * Send the events of an instance to NATS
+   */
+  public readonly nats: EventChannelModule;
+  /**
+   * Send the events of an instance to Amazon SQS
+   */
+  public readonly sqs: EventChannelModule;
+  /**
+   * Send the events of an instance to Kafka
+   */
+  public readonly kafka: EventChannelModule;
+  /**
+   * Send the events of an instance to Pusher
+   */
+  public readonly pusher: EventChannelModule<SetPusherRequest, PusherRecord>;
+  /**
+   * Check and finish the activation of an Evolution API 2.4 server
+   */
+  public readonly license: LicenseModule;
 
   /**
    * Evolution Client - API client for interacting with the Evolution API
@@ -84,6 +119,25 @@ export class EvolutionClient {
     this.proxy = new ProxyModule(this.api);
     this.templates = new TemplatesModule(this.api);
     this.business = new BusinessModule(this.api);
+    this.websocket = new EventChannelModule(
+      this.api,
+      "websocket",
+      Routes.Websocket,
+    );
+    this.rabbitmq = new EventChannelModule(
+      this.api,
+      "rabbitmq",
+      Routes.Rabbitmq,
+    );
+    this.nats = new EventChannelModule(this.api, "nats", Routes.Nats);
+    this.sqs = new EventChannelModule(this.api, "sqs", Routes.Sqs);
+    this.kafka = new EventChannelModule(this.api, "kafka", Routes.Kafka);
+    this.pusher = new EventChannelModule<SetPusherRequest, PusherRecord>(
+      this.api,
+      "pusher",
+      Routes.Pusher,
+    );
+    this.license = new LicenseModule(this.api);
   }
 
   setInstance(instance: string) {
@@ -106,6 +160,8 @@ export type * from "./modules/labels/schemas";
 export type * from "./modules/proxy/schemas";
 export type * from "./modules/templates/schemas";
 export type * from "./modules/business/schemas";
+export type * from "./modules/event-channels/schemas";
+export type * from "./modules/license/schemas";
 export type { ClientOptions };
 
 // API types
