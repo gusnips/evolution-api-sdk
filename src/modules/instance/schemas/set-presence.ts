@@ -1,19 +1,13 @@
-// Pure TypeScript interfaces for better IDE support and performance
+export type InstancePresence =
+  "available" | "unavailable" | "composing" | "recording" | "paused";
 
 export interface SetPresenceRequest {
   instanceName?: string;
-  presence: "unavailable" | "available";
-}
-
-export interface SetPresenceData {
-  instance: string;
-  presence: string;
+  presence: InstancePresence;
 }
 
 export interface SetPresenceResponse {
-  error: boolean;
-  message: string;
-  data: SetPresenceData;
+  presence: InstancePresence;
 }
 
 // Backward compatibility aliases

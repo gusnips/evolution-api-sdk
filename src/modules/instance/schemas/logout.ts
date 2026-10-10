@@ -1,22 +1,17 @@
-// Pure TypeScript interfaces for better IDE support and performance
-
 export interface LogoutRequest {
   instanceName: string;
 }
 
-export interface LogoutInstanceInfo {
-  instanceName: string;
-  status: string;
-}
-
 export interface LogoutResponse {
-  status: "SUCCESS" | "ERROR";
-  error: boolean;
+  status: "SUCCESS";
+  error: false;
   response: {
+    /**
+     * "Instance logged out", or "Instance was already disconnected"
+     */
     message: string;
   };
-  instance: LogoutInstanceInfo;
 }
 
 // Backward compatibility aliases
-export type LogoutOptions = LogoutRequest; 
+export type LogoutOptions = LogoutRequest;

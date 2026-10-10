@@ -1,17 +1,17 @@
-import { Jid } from "@/types/tags";
-import { ConnectionState } from "@/types/webhooks";
+import type { Jid } from "@/types/tags";
+import type { ConnectionState } from "@/types/webhooks";
 
 export interface Setting {
   id: string;
   rejectCall: boolean;
-  msgCall: string;
+  msgCall: string | null;
   groupsIgnore: boolean;
   alwaysOnline: boolean;
   readMessages: boolean;
   readStatus: boolean;
   syncFullHistory: boolean;
-  wavoipToken: string;
-  createdAt: string;
+  wavoipToken: string | null;
+  createdAt: string | null;
   updatedAt: string;
   instanceId: string;
 }
@@ -26,20 +26,19 @@ export interface InstanceDetails {
   id: string;
   name: string;
   connectionStatus: ConnectionState;
-  ownerJid: Jid;
-  profileName: string;
+  ownerJid: Jid | null;
+  profileName: string | null;
   profilePicUrl: string | null;
-  profileStatus?: string;
-  integration: string;
+  integration: string | null;
   number: string | null;
   businessId: string | null;
-  token: string;
-  clientName: string;
-  disconnectionReasonCode: string | number | null;
+  token: string | null;
+  clientName: string | null;
+  disconnectionReasonCode: number | null;
   disconnectionObject: unknown | null;
   disconnectionAt: string | null;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: string | null;
+  updatedAt: string | null;
   Chatwoot: unknown | null;
   Proxy: unknown | null;
   Rabbitmq: unknown | null;
@@ -52,6 +51,12 @@ export interface InstanceDetails {
 
 export type FetchAllResponse = InstanceDetails[];
 
+/**
+ * Send one filter at most. `instanceId` and `number` win over `instanceName`.
+ * With the global API key and no filter you get every instance
+ */
 export interface FetchAllRequest {
   instanceName?: string;
+  instanceId?: string;
+  number?: string;
 }

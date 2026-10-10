@@ -16,7 +16,7 @@ export class InstanceModule {
   constructor(private readonly api: ApiService) {}
 
   async create(
-    options: Create.CreateInstanceRequest
+    options: Create.CreateInstanceRequest,
   ): Promise<Create.CreateInstanceResponse> {
     const response = await this.api.post(Routes.Instance.Create, {
       body: options,
@@ -27,15 +27,16 @@ export class InstanceModule {
 
   async connect(
     options: Connect.ConnectRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Connect.ConnectResponse> {
-    const { instanceName } = options;
+    const { instanceName, number } = options;
     const instance = methodOptions?.instance ?? instanceName;
     if (!instance) {
       throw new Error("Instance name is required");
     }
     const response = await this.api.get(Routes.Instance.Connect, {
       instance,
+      params: { number },
       isInstanceUrl: true,
     });
     return response as Connect.ConnectResponse;
@@ -43,7 +44,7 @@ export class InstanceModule {
 
   async connectionState(
     options: ConnectionState.ConnectionStateRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<ConnectionState.ConnectionStateResponse> {
     const { instanceName } = options;
     const instance = methodOptions?.instance ?? instanceName;
@@ -59,7 +60,7 @@ export class InstanceModule {
 
   async logout(
     options: Logout.LogoutRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Logout.LogoutResponse> {
     const { instanceName } = options;
     const instance = methodOptions?.instance ?? instanceName;
@@ -83,7 +84,7 @@ export class InstanceModule {
 
   async restart(
     options: Restart.RestartRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Restart.RestartResponse> {
     const { instanceName } = options;
     const instance = methodOptions?.instance ?? instanceName;
@@ -98,7 +99,7 @@ export class InstanceModule {
   }
 
   async fetchAll(
-    options?: FetchAll.FetchAllRequest
+    options?: FetchAll.FetchAllRequest,
   ): Promise<FetchAll.FetchAllResponse> {
     const response = await this.api.get(Routes.Instance.FetchAll, {
       params: options,
@@ -109,7 +110,7 @@ export class InstanceModule {
 
   async setPresence(
     options: SetPresence.SetPresenceRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<SetPresence.SetPresenceResponse> {
     const { instanceName, ...rest } = options;
     const instance = methodOptions?.instance ?? instanceName;
