@@ -31,15 +31,15 @@ export class GroupsModule {
    */
   async findAll(
     getParticipants: false,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FindAll.FindAllGroupsResponse>;
   async findAll(
     getParticipants: true,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FindAll.FindAllGroupsWithParticipantsResponse>;
   async findAll(
     getParticipants = false,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<
     | FindAll.FindAllGroupsResponse
     | FindAll.FindAllGroupsWithParticipantsResponse
@@ -62,7 +62,7 @@ export class GroupsModule {
    */
   async findByInviteCode(
     inviteCode: string | GroupInviteCode,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FindByInviteCode.FindGroupByInviteCodeResponse> {
     const response = await this.api.get(Routes.Groups.FindByInviteCode, {
       params: { inviteCode: inviteCode as GroupInviteCode },
@@ -79,7 +79,7 @@ export class GroupsModule {
    */
   async findByJid(
     groupJid: string | GroupJid,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FindByJid.FindGroupByJidResponse> {
     const response = await this.api.get(Routes.Groups.FindByJid, {
       params: { groupJid: groupJid as GroupJid },
@@ -91,7 +91,7 @@ export class GroupsModule {
 
   async create(
     options: Create.CreateGroupRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Create.CreateGroupResponse> {
     const response = await this.api.post(Routes.Groups.Create, {
       body: options,
@@ -103,7 +103,7 @@ export class GroupsModule {
 
   async updatePicture(
     options: UpdatePicture.UpdatePictureRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<UpdatePicture.UpdatePictureResponse> {
     const response = await this.api.post(Routes.Groups.UpdatePicture, {
       body: options,
@@ -115,7 +115,7 @@ export class GroupsModule {
 
   async updateSubject(
     options: UpdateSubject.UpdateSubjectRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<UpdateSubject.UpdateSubjectResponse> {
     const response = await this.api.post(Routes.Groups.UpdateSubject, {
       body: options,
@@ -127,7 +127,7 @@ export class GroupsModule {
 
   async updateDescription(
     options: UpdateDescription.UpdateDescriptionRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<UpdateDescription.UpdateDescriptionResponse> {
     const response = await this.api.post(Routes.Groups.UpdateDescription, {
       body: options,
@@ -139,7 +139,7 @@ export class GroupsModule {
 
   async fetchInviteCode(
     options: FetchInviteCode.FetchInviteCodeRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FetchInviteCode.FetchInviteCodeResponse> {
     const response = await this.api.get(Routes.Groups.FetchInviteCode, {
       params: options,
@@ -151,7 +151,7 @@ export class GroupsModule {
 
   async acceptInviteCode(
     options: AcceptInviteCode.AcceptInviteCodeRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<AcceptInviteCode.AcceptInviteCodeResponse> {
     const response = await this.api.get(Routes.Groups.AcceptInviteCode, {
       params: options,
@@ -163,7 +163,7 @@ export class GroupsModule {
 
   async revokeInviteCode(
     options: RevokeInviteCode.RevokeInviteCodeRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<RevokeInviteCode.RevokeInviteCodeResponse> {
     const response = await this.api.post(Routes.Groups.RevokeInviteCode, {
       body: options,
@@ -175,7 +175,7 @@ export class GroupsModule {
 
   async sendGroupInvite(
     options: SendGroupInvite.SendGroupInviteRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<SendGroupInvite.SendGroupInviteResponse> {
     const response = await this.api.post(Routes.Groups.SendGroupInvite, {
       body: options,
@@ -187,7 +187,7 @@ export class GroupsModule {
 
   async findMembers(
     options: FindMembers.FindMembersRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FindMembers.FindMembersResponse> {
     const response = await this.api.get(Routes.Groups.FindMembers, {
       params: options,
@@ -199,7 +199,7 @@ export class GroupsModule {
 
   async updateMembers(
     options: UpdateMembers.UpdateMembersRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<UpdateMembers.UpdateMembersResponse> {
     const response = await this.api.post(Routes.Groups.UpdateMembers, {
       body: options,
@@ -211,7 +211,7 @@ export class GroupsModule {
 
   async updateSetting(
     options: UpdateSetting.UpdateSettingRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<UpdateSetting.UpdateSettingResponse> {
     const response = await this.api.post(Routes.Groups.UpdateSetting, {
       body: options,
@@ -223,7 +223,7 @@ export class GroupsModule {
 
   async updateMemberAddMode(
     options: UpdateMemberAddMode.UpdateMemberAddModeRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<UpdateMemberAddMode.UpdateMemberAddModeResponse> {
     const response = await this.api.post(Routes.Groups.UpdateMemberAddMode, {
       body: options,
@@ -235,7 +235,7 @@ export class GroupsModule {
 
   async toggleEphemeral(
     options: ToggleEphemeral.ToggleEphemeralRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<ToggleEphemeral.ToggleEphemeralResponse> {
     const response = await this.api.post(Routes.Groups.ToggleEphemeral, {
       body: options,
@@ -247,7 +247,7 @@ export class GroupsModule {
 
   async leave(
     options: Leave.LeaveRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Leave.LeaveResponse> {
     const response = await this.api.delete(Routes.Groups.Leave, {
       params: options,

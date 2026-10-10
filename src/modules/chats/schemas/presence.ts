@@ -8,11 +8,7 @@
  * - `available` and `unavailable`: online and offline
  */
 export type PresenceState =
-  | "unavailable"
-  | "available"
-  | "composing"
-  | "recording"
-  | "paused";
+  "unavailable" | "available" | "composing" | "recording" | "paused";
 
 /**
  * Options for presence configuration

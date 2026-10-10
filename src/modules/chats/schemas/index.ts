@@ -35,10 +35,20 @@ export type {
   GetBase64FromMediaMessageResponse,
 } from "./get-base64-from-media-message";
 export type { GetPollVoteRequest, GetPollVoteResponse } from "./get-poll-vote";
-export type { MarkAsPlayedRequest, MarkAsPlayedResponse } from "./mark-as-played";
+export type {
+  MarkAsPlayedRequest,
+  MarkAsPlayedResponse,
+} from "./mark-as-played";
 export type { MarkAsReadOptions, MarkAsReadResponse } from "./mark-as-read";
-export type { MarkAsUnreadRequest, MarkAsUnreadResponse } from "./mark-as-unread";
-export type { PresenceOptions, PresenceParams, PresenceState } from "./presence";
+export type {
+  MarkAsUnreadRequest,
+  MarkAsUnreadResponse,
+} from "./mark-as-unread";
+export type {
+  PresenceOptions,
+  PresenceParams,
+  PresenceState,
+} from "./presence";
 export type {
   UpdateBlockStatusRequest,
   UpdateBlockStatusResponse,

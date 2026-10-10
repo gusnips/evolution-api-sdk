@@ -36,11 +36,7 @@ export interface PixButton {
 }
 
 export type Button =
-  | ReplyButton
-  | CopyButton
-  | UrlButton
-  | CallButton
-  | PixButton;
+  ReplyButton | CopyButton | UrlButton | CallButton | PixButton;
 
 /**
  * WhatsApp accepts one of these sets of buttons, never a mix:

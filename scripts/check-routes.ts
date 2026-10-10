@@ -23,23 +23,33 @@ const mounts: Record<string, string> = {
 const verbs = new Set<string>();
 for (const [file, mount] of Object.entries(mounts)) {
   const source = readFileSync(`${upstream}/${file}`, "utf8");
-  for (const [, verb, name] of source.matchAll(/\.(get|post|put|delete|patch)\(\s*this\.routerPath\('([^']+)'/g)) {
+  for (const [, verb, name] of source.matchAll(
+    /\.(get|post|put|delete|patch)\(\s*this\.routerPath\('([^']+)'/g,
+  )) {
     verbs.add(`${verb.toUpperCase()} ${mount}/${name}`);
   }
 }
 verbs.add("POST instance/create"); // registered without routerPath()
 
 const used = new Set<string>();
-const modules = readdirSync("src/modules", { recursive: true, encoding: "utf8" }).filter((f) => f.endsWith("index.ts"));
+const modules = readdirSync("src/modules", {
+  recursive: true,
+  encoding: "utf8",
+}).filter((f) => f.endsWith("index.ts"));
 for (const file of modules) {
   const source = readFileSync(`src/modules/${file}`, "utf8");
-  for (const [, verb, group, name] of source.matchAll(/this\.api\.(get|post|put|delete|patch)\(\s*Routes\.(\w+)\.(\w+)/g)) {
-    const path = (Routes as Record<string, Record<string, string>>)[group]?.[name];
+  for (const [, verb, group, name] of source.matchAll(
+    /this\.api\.(get|post|put|delete|patch)\(\s*Routes\.(\w+)\.(\w+)/g,
+  )) {
+    const path = (Routes as Record<string, Record<string, string>>)[group]?.[
+      name
+    ];
     used.add(`${verb.toUpperCase()} ${path ?? `Routes.${group}.${name}`}`);
   }
 }
 
 const missing = [...used].filter((r) => !verbs.has(r));
-for (const route of missing) console.error(`SDK route not found upstream: ${route}`);
+for (const route of missing)
+  console.error(`SDK route not found upstream: ${route}`);
 if (missing.length) process.exit(1);
 console.log(`${used.size} SDK routes match upstream`);

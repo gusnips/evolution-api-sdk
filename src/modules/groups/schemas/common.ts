@@ -33,8 +33,10 @@ export interface GroupWithParticipantsResponse extends GroupResponse {
 /**
  * Group as WhatsApp reports it. It has no picture
  */
-export interface GroupMetadataResponse
-  extends Omit<GroupWithParticipantsResponse, "pictureUrl"> {
+export interface GroupMetadataResponse extends Omit<
+  GroupWithParticipantsResponse,
+  "pictureUrl"
+> {
   joinApprovalMode?: boolean;
   memberAddMode?: boolean;
 }

@@ -17,7 +17,7 @@ export class ProfileModule {
 
   async fetchBusinessProfile(
     options: FetchBusinessProfile.FetchBusinessProfileRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FetchBusinessProfile.FetchBusinessProfileResponse> {
     const response = await this.api.post(Routes.Profile.FetchBusinessProfile, {
       body: options,
@@ -29,7 +29,7 @@ export class ProfileModule {
 
   async fetchProfile(
     options: FetchProfile.FetchProfileRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FetchProfile.FetchProfileResponse> {
     const response = await this.api.post(Routes.Profile.FetchProfile, {
       body: options,
@@ -46,7 +46,7 @@ export class ProfileModule {
    */
   async fetchLid(
     options: FetchLid.FetchLidRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FetchLid.FetchLidResponse> {
     const response = await this.api.post(Routes.Profile.FetchLid, {
       body: options,
@@ -58,7 +58,7 @@ export class ProfileModule {
 
   async updateName(
     options: UpdateName.UpdateNameRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<UpdateName.UpdateNameResponse> {
     const response = await this.api.post(Routes.Profile.UpdateName, {
       body: options,
@@ -70,7 +70,7 @@ export class ProfileModule {
 
   async updateStatus(
     options: UpdateStatus.UpdateStatusRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<UpdateStatus.UpdateStatusResponse> {
     const response = await this.api.post(Routes.Profile.UpdateStatus, {
       body: options,
@@ -82,7 +82,7 @@ export class ProfileModule {
 
   async updatePicture(
     options: UpdatePicture.UpdatePictureRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<UpdatePicture.UpdatePictureResponse> {
     const response = await this.api.post(Routes.Profile.UpdatePicture, {
       body: options,
@@ -93,22 +93,22 @@ export class ProfileModule {
   }
 
   async removePicture(
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<RemovePicture.RemovePictureResponse> {
     const response = await this.api.delete(
       Routes.Profile.RemovePicture,
-      methodOptions
+      methodOptions,
     );
 
     return response as RemovePicture.RemovePictureResponse;
   }
 
   async fetchPrivacySettings(
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FetchPrivacySettings.FetchPrivacySettingsResponse> {
     const response = await this.api.get(
       Routes.Profile.FetchPrivacySettings,
-      methodOptions
+      methodOptions,
     );
 
     return response as FetchPrivacySettings.FetchPrivacySettingsResponse;
@@ -116,7 +116,7 @@ export class ProfileModule {
 
   async updatePrivacySettings(
     options: UpdatePrivacySettings.UpdatePrivacySettingsRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<UpdatePrivacySettings.UpdatePrivacySettingsResponse> {
     const response = await this.api.post(Routes.Profile.UpdatePrivacySettings, {
       body: options,

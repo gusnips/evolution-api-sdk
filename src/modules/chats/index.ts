@@ -32,7 +32,7 @@ export class ChatsModule {
    */
   async check(
     numbers: Check.CheckOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Check.CheckResponse> {
     const body = {
       numbers: Array.isArray(numbers) ? numbers : [numbers],
@@ -50,7 +50,7 @@ export class ChatsModule {
    * @param methodOptions - Method-specific options (instance override)
    */
   async findAll(
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FindAll.FindAllChatsResponse> {
     const response = await this.api.post(Routes.Chats.FindAll, {
       body: {},
@@ -67,7 +67,7 @@ export class ChatsModule {
    */
   async updatePresence(
     options: Presence.PresenceOptions,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<void> {
     if (!options.number) {
       throw new Error("Number is required");
@@ -90,7 +90,7 @@ export class ChatsModule {
    */
   async markAsRead(
     options: MarkAsRead.MarkAsReadRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<MarkAsRead.MarkAsReadResponse> {
     const response = await this.api.post(Routes.Chats.MarkAsRead, {
       body: options,
@@ -107,7 +107,7 @@ export class ChatsModule {
    */
   async markAsPlayed(
     options: MarkAsPlayed.MarkAsPlayedRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<MarkAsPlayed.MarkAsPlayedResponse> {
     const response = await this.api.post(Routes.Chats.MarkAsPlayed, {
       body: options,
@@ -124,7 +124,7 @@ export class ChatsModule {
    */
   async markAsUnread(
     options: MarkAsUnread.MarkAsUnreadRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<MarkAsUnread.MarkAsUnreadResponse> {
     const response = await this.api.post(Routes.Chats.MarkAsUnread, {
       body: options,
@@ -141,7 +141,7 @@ export class ChatsModule {
    */
   async archive(
     options: Archive.ArchiveRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<Archive.ArchiveResponse> {
     const response = await this.api.post(Routes.Chats.Archive, {
       body: options,
@@ -158,7 +158,7 @@ export class ChatsModule {
    */
   async deleteMessage(
     options: DeleteMessage.DeleteMessageRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<DeleteMessage.DeleteMessageResponse> {
     const response = await this.api.delete(Routes.Chats.DeleteMessage, {
       body: options,
@@ -175,7 +175,7 @@ export class ChatsModule {
    */
   async fetchProfilePicture(
     options: FetchProfilePicture.FetchProfilePictureRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FetchProfilePicture.FetchProfilePictureResponse> {
     const response = await this.api.post(Routes.Chats.FetchProfilePicture, {
       body: options,
@@ -192,7 +192,7 @@ export class ChatsModule {
    */
   async findContacts(
     options: FindContacts.FindContactsRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FindContacts.FindContactsResponse> {
     const response = await this.api.post(Routes.Chats.FindContacts, {
       body: options,
@@ -209,7 +209,7 @@ export class ChatsModule {
    */
   async findMessages(
     options: FindMessages.FindMessagesRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FindMessages.FindMessagesResponse> {
     const response = await this.api.post(Routes.Chats.FindMessages, {
       body: options,
@@ -226,7 +226,7 @@ export class ChatsModule {
    */
   async findStatusMessage(
     options: FindStatusMessage.FindStatusMessageRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FindStatusMessage.FindStatusMessageResponse> {
     const response = await this.api.post(Routes.Chats.FindStatusMessage, {
       body: options,
@@ -243,7 +243,7 @@ export class ChatsModule {
    */
   async updateMessage(
     options: UpdateMessage.UpdateMessageRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<UpdateMessage.UpdateMessageResponse> {
     const response = await this.api.post(Routes.Chats.UpdateMessage, {
       body: options,
@@ -260,7 +260,7 @@ export class ChatsModule {
    */
   async updateBlockStatus(
     options: UpdateBlockStatus.UpdateBlockStatusRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<UpdateBlockStatus.UpdateBlockStatusResponse> {
     const response = await this.api.post(Routes.Chats.UpdateBlockStatus, {
       body: options,
@@ -277,7 +277,7 @@ export class ChatsModule {
    */
   async findChatByRemoteJid(
     options: FindChatByRemoteJid.FindChatByRemoteJidRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FindChatByRemoteJid.FindChatByRemoteJidResponse> {
     const response = await this.api.get(Routes.Chats.FindChatByRemoteJid, {
       params: options,
@@ -294,7 +294,7 @@ export class ChatsModule {
    */
   async findChannels(
     options: FindChannels.FindChannelsRequest = {},
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<FindChannels.FindChannelsResponse> {
     const response = await this.api.post(Routes.Chats.FindChannels, {
       body: options,
@@ -311,7 +311,7 @@ export class ChatsModule {
    */
   async getPollVote(
     options: GetPollVote.GetPollVoteRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<GetPollVote.GetPollVoteResponse> {
     const response = await this.api.post(Routes.Chats.GetPollVote, {
       body: options,
@@ -328,14 +328,14 @@ export class ChatsModule {
    */
   async getBase64FromMediaMessage(
     options: GetBase64FromMediaMessage.GetBase64FromMediaMessageRequest,
-    methodOptions?: MethodOptions
+    methodOptions?: MethodOptions,
   ): Promise<GetBase64FromMediaMessage.GetBase64FromMediaMessageResponse> {
     const response = await this.api.post(
       Routes.Chats.GetBase64FromMediaMessage,
       {
         body: options,
         ...methodOptions,
-      }
+      },
     );
 
     return response as GetBase64FromMediaMessage.GetBase64FromMediaMessageResponse;
