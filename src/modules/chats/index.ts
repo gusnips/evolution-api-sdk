@@ -8,13 +8,18 @@ import type * as Check from "./schemas/check";
 import type * as DeleteMessage from "./schemas/delete-message";
 import type * as FetchProfilePicture from "./schemas/fetch-profile-picture";
 import type * as FindAll from "./schemas/find-all";
+import type * as FindChannels from "./schemas/find-channels";
+import type * as FindChatByRemoteJid from "./schemas/find-chat-by-remote-jid";
 import type * as FindContacts from "./schemas/find-contacts";
 import type * as FindMessages from "./schemas/find-messages";
 import type * as FindStatusMessage from "./schemas/find-status-message";
 import type * as GetBase64FromMediaMessage from "./schemas/get-base64-from-media-message";
+import type * as GetPollVote from "./schemas/get-poll-vote";
+import type * as MarkAsPlayed from "./schemas/mark-as-played";
 import type * as MarkAsRead from "./schemas/mark-as-read";
 import type * as MarkAsUnread from "./schemas/mark-as-unread";
 import type * as Presence from "./schemas/presence";
+import type * as UpdateBlockStatus from "./schemas/update-block-status";
 import type * as UpdateMessage from "./schemas/update-message";
 
 export class ChatsModule {
@@ -93,6 +98,23 @@ export class ChatsModule {
     });
 
     return response as MarkAsRead.MarkAsReadResponse;
+  }
+
+  /**
+   * Marks received audio messages as played (the blue microphone)
+   * @param options - Mark as played options
+   * @param methodOptions - Method-specific options (instance override)
+   */
+  async markAsPlayed(
+    options: MarkAsPlayed.MarkAsPlayedRequest,
+    methodOptions?: MethodOptions
+  ): Promise<MarkAsPlayed.MarkAsPlayedResponse> {
+    const response = await this.api.post(Routes.Chats.MarkAsPlayed, {
+      body: options,
+      ...methodOptions,
+    });
+
+    return response as MarkAsPlayed.MarkAsPlayedResponse;
   }
 
   /**
@@ -223,12 +245,80 @@ export class ChatsModule {
     options: UpdateMessage.UpdateMessageRequest,
     methodOptions?: MethodOptions
   ): Promise<UpdateMessage.UpdateMessageResponse> {
-    const response = await this.api.put(Routes.Chats.UpdateMessage, {
+    const response = await this.api.post(Routes.Chats.UpdateMessage, {
       body: options,
       ...methodOptions,
     });
 
     return response as UpdateMessage.UpdateMessageResponse;
+  }
+
+  /**
+   * Blocks or unblocks a contact
+   * @param options - Number and `block` or `unblock`
+   * @param methodOptions - Method-specific options (instance override)
+   */
+  async updateBlockStatus(
+    options: UpdateBlockStatus.UpdateBlockStatusRequest,
+    methodOptions?: MethodOptions
+  ): Promise<UpdateBlockStatus.UpdateBlockStatusResponse> {
+    const response = await this.api.post(Routes.Chats.UpdateBlockStatus, {
+      body: options,
+      ...methodOptions,
+    });
+
+    return response as UpdateBlockStatus.UpdateBlockStatusResponse;
+  }
+
+  /**
+   * Finds one chat by its JID
+   * @param options - The chat JID
+   * @param methodOptions - Method-specific options (instance override)
+   */
+  async findChatByRemoteJid(
+    options: FindChatByRemoteJid.FindChatByRemoteJidRequest,
+    methodOptions?: MethodOptions
+  ): Promise<FindChatByRemoteJid.FindChatByRemoteJidResponse> {
+    const response = await this.api.get(Routes.Chats.FindChatByRemoteJid, {
+      params: options,
+      ...methodOptions,
+    });
+
+    return response as FindChatByRemoteJid.FindChatByRemoteJidResponse;
+  }
+
+  /**
+   * Finds the WhatsApp channels this instance has messages from
+   * @param options - Pagination
+   * @param methodOptions - Method-specific options (instance override)
+   */
+  async findChannels(
+    options: FindChannels.FindChannelsRequest = {},
+    methodOptions?: MethodOptions
+  ): Promise<FindChannels.FindChannelsResponse> {
+    const response = await this.api.post(Routes.Chats.FindChannels, {
+      body: options,
+      ...methodOptions,
+    });
+
+    return response as FindChannels.FindChannelsResponse;
+  }
+
+  /**
+   * Counts the votes of a poll, by option
+   * @param options - The poll message and its chat
+   * @param methodOptions - Method-specific options (instance override)
+   */
+  async getPollVote(
+    options: GetPollVote.GetPollVoteRequest,
+    methodOptions?: MethodOptions
+  ): Promise<GetPollVote.GetPollVoteResponse> {
+    const response = await this.api.post(Routes.Chats.GetPollVote, {
+      body: options,
+      ...methodOptions,
+    });
+
+    return response as GetPollVote.GetPollVoteResponse;
   }
 
   /**

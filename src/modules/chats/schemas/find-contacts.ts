@@ -1,17 +1,33 @@
 // Pure TypeScript interfaces for better IDE support and performance
-import type { ChatId } from "@/types/tags";
+import type { Jid } from "@/types/tags";
 
 export interface FindContactsRequest {
-  number: ChatId;
+  where?: {
+    id?: string;
+    pushName?: string;
+    /**
+     * Number or JID
+     */
+    remoteJid?: string;
+  };
+  page?: number;
+  offset?: number;
 }
 
 export interface Contact {
-  id: ChatId;
-  name: string;
-  pushname: string;
+  id: string;
+  remoteJid: Jid;
+  pushName: string | null;
+  profilePicUrl: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+  instanceId: string;
+  isGroup: boolean;
+  isSaved: boolean;
+  type: "group" | "contact" | "group_member";
 }
 
 export type FindContactsResponse = Contact[];
 
 // Backward compatibility aliases
-export type FindContactsOptions = FindContactsRequest; 
+export type FindContactsOptions = FindContactsRequest;

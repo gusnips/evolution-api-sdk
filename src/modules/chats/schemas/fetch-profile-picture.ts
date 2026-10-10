@@ -1,13 +1,17 @@
 // Pure TypeScript interfaces for better IDE support and performance
-import type { ChatId } from "@/types/tags";
+import type { ChatId, Jid } from "@/types/tags";
 
 export interface FetchProfilePictureRequest {
   number: ChatId;
 }
 
 export interface FetchProfilePictureResponse {
-  profilePictureUrl: string;
+  wuid: Jid;
+  /**
+   * `null` when the contact has no picture or hides it
+   */
+  profilePictureUrl: string | null;
 }
 
 // Backward compatibility aliases
-export type FetchProfilePictureOptions = FetchProfilePictureRequest; 
+export type FetchProfilePictureOptions = FetchProfilePictureRequest;

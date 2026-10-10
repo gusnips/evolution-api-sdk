@@ -1,5 +1,6 @@
 export type { ArchiveOptions, ArchiveResponse } from "./archive";
 export type { CheckOptions, CheckResponse } from "./check";
+export type { LastMessage, MessageKey, SentMessage } from "./common";
 export type {
   DeleteMessageOptions,
   DeleteMessageResponse,
@@ -9,6 +10,14 @@ export type {
   FetchProfilePictureResponse,
 } from "./fetch-profile-picture";
 export type { FindAllChatsResponse } from "./find-all";
+export type {
+  FindChannelsRequest,
+  FindChannelsResponse,
+} from "./find-channels";
+export type {
+  FindChatByRemoteJidRequest,
+  FindChatByRemoteJidResponse,
+} from "./find-chat-by-remote-jid";
 export type {
   FindContactsOptions,
   FindContactsResponse,
@@ -25,8 +34,15 @@ export type {
   GetBase64FromMediaMessageRequest,
   GetBase64FromMediaMessageResponse,
 } from "./get-base64-from-media-message";
+export type { GetPollVoteRequest, GetPollVoteResponse } from "./get-poll-vote";
+export type { MarkAsPlayedRequest, MarkAsPlayedResponse } from "./mark-as-played";
 export type { MarkAsReadOptions, MarkAsReadResponse } from "./mark-as-read";
-export type { PresenceOptions, PresenceParams } from "./presence";
+export type { MarkAsUnreadRequest, MarkAsUnreadResponse } from "./mark-as-unread";
+export type { PresenceOptions, PresenceParams, PresenceState } from "./presence";
+export type {
+  UpdateBlockStatusRequest,
+  UpdateBlockStatusResponse,
+} from "./update-block-status";
 export type {
   UpdateMessageOptions,
   UpdateMessageResponse,

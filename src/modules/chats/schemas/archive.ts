@@ -1,15 +1,19 @@
 // Pure TypeScript interfaces for better IDE support and performance
-import type { ChatId } from "@/types/tags";
+import type { LastMessage } from "./common";
 
 export interface ArchiveRequest {
-  number: ChatId;
+  /**
+   * Number or JID of the chat. Its last message is used when `lastMessage` is not set
+   */
+  chat?: string;
+  lastMessage?: LastMessage;
   archive: boolean;
 }
 
 export interface ArchiveResponse {
-  status: string;
-  message: string;
+  chatId: string;
+  archived: boolean;
 }
 
 // Backward compatibility aliases
-export type ArchiveOptions = ArchiveRequest; 
+export type ArchiveOptions = ArchiveRequest;
