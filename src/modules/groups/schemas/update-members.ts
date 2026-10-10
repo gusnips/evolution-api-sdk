@@ -8,11 +8,13 @@ export interface UpdateMembersRequest {
 }
 
 export interface Participant {
-  id: Jid;
+  /**
+   * HTTP-like code, "200" when it worked for this participant
+   */
   status: string;
+  jid?: Jid;
 }
 
-export type UpdateMembersResponse = Participant[];
-
-// Backward compatibility aliases
-export type UpdateMembersOptions = UpdateMembersRequest; 
+export interface UpdateMembersResponse {
+  updateParticipants: Participant[];
+}

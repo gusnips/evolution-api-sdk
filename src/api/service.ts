@@ -12,7 +12,7 @@ export class ApiService {
 
   async request<T = unknown>(
     path: string,
-    options: APIRequestInit = {}
+    options: APIRequestInit = {},
   ): Promise<T> {
     const { isInstanceUrl = true } = options;
     let instance = this.options.instance;
@@ -41,7 +41,7 @@ export class ApiService {
     }
 
     let response: Response;
-    let data: any;
+    let data: unknown;
 
     try {
       response = await fetch(url, init);
@@ -65,12 +65,12 @@ export class ApiService {
           url: url.toString(),
           params: params.toString(),
           body: JSON.stringify(options.body),
-        } as unknown as Record<string, any>,
-        response.status
+        },
+        response.status,
       );
     }
 
-    return data;
+    return data as T;
   }
 
   private makeInit(options: APIRequestInit): {
@@ -106,35 +106,35 @@ export class ApiService {
 
   async get<T = unknown>(
     path: string,
-    options: Omit<APIRequestInit, "method"> = {}
+    options: Omit<APIRequestInit, "method"> = {},
   ): Promise<T> {
     return this.request<T>(path, { ...options, method: "GET" });
   }
 
   async post<T = unknown>(
     path: string,
-    options: Omit<APIRequestInit, "method"> = {}
+    options: Omit<APIRequestInit, "method"> = {},
   ): Promise<T> {
     return this.request<T>(path, { ...options, method: "POST" });
   }
 
   async put<T = unknown>(
     path: string,
-    options: Omit<APIRequestInit, "method"> = {}
+    options: Omit<APIRequestInit, "method"> = {},
   ): Promise<T> {
     return this.request<T>(path, { ...options, method: "PUT" });
   }
 
   async patch<T = unknown>(
     path: string,
-    options: Omit<APIRequestInit, "method"> = {}
+    options: Omit<APIRequestInit, "method"> = {},
   ): Promise<T> {
     return this.request<T>(path, { ...options, method: "PATCH" });
   }
 
   async delete<T = unknown>(
     path: string,
-    options: Omit<APIRequestInit, "method"> = {}
+    options: Omit<APIRequestInit, "method"> = {},
   ): Promise<T> {
     return this.request<T>(path, { ...options, method: "DELETE" });
   }

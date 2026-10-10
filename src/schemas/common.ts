@@ -10,12 +10,16 @@ export type ApiNumber = PhoneNumber | Jid | GroupJid;
 export type Media = string; // URL or base64 string
 
 // Utility functions
-export const validatePhoneNumber = (value: string): boolean => isValidPhoneNumber(value);
-export const parsePhoneNumberUtil = (phoneNumber: string): string => parsePhoneNumber(phoneNumber).number;
+export const validatePhoneNumber = (value: string): boolean =>
+  isValidPhoneNumber(value);
+export const parsePhoneNumberUtil = (phoneNumber: string): string =>
+  parsePhoneNumber(phoneNumber).number;
 
-export const validateJid = (value: string): boolean => value.endsWith("@s.whatsapp.net");
-export const validateGroupJid = (value: string): boolean => value.endsWith("@g.us");
-export const validateGroupInviteCode = (value: string): boolean => 
+export const validateJid = (value: string): boolean =>
+  value.endsWith("@s.whatsapp.net");
+export const validateGroupJid = (value: string): boolean =>
+  value.endsWith("@g.us");
+export const validateGroupInviteCode = (value: string): boolean =>
   value.length === 22 && /^[a-zA-Z0-9]{22}$/.test(value);
 
 export const validateMedia = (value: string): boolean => {
@@ -32,13 +36,3 @@ export const validateMedia = (value: string): boolean => {
     }
   }
 };
-
-// Backward compatibility - keeping the schema names but as type aliases
-export type PhoneNumberSchema = PhoneNumber;
-export type JidSchema = Jid;
-export type GroupJidSchema = GroupJid;
-export type GroupInviteCodeSchema = GroupInviteCode;
-export type MessageIdSchema = MessageId;
-export type ChatIdSchema = ChatId;
-export type ApiNumberSchema = ApiNumber;
-export type mediaSchema = Media;

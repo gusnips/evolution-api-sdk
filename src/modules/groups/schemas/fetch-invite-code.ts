@@ -6,8 +6,6 @@ export interface FetchInviteCodeRequest {
 }
 
 export interface FetchInviteCodeResponse {
-    code: string;
+  inviteUrl: string;
+  inviteCode: string;
 }
-
-// Backward compatibility aliases
-export type FetchInviteCodeOptions = FetchInviteCodeRequest; 

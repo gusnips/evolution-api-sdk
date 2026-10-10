@@ -6,6 +6,3 @@ export interface UpdateNameRequest {
 export interface UpdateNameResponse {
   update: "success" | "error";
 }
-
-// Backward compatibility aliases
-export type UpdateNameOptions = UpdateNameRequest; 

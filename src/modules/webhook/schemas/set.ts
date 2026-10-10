@@ -1,16 +1,18 @@
-import { WebhookEventSetup } from "@/types/events";
-// Pure TypeScript interfaces for better IDE support and performance
+import type { WebhookEventSetup } from "@/types/events";
+import type { WebhookRecord } from "./find";
+
 export interface SetRequest {
-  enabled: boolean;
-  url: string;
-  webhookByEvents: boolean;
-  webhookBase64: boolean;
-  events: WebhookEventSetup[];
+  webhook: {
+    enabled: boolean;
+    url: string;
+    headers?: Record<string, string>;
+    byEvents?: boolean;
+    base64?: boolean;
+    /**
+     * An empty list subscribes to every event
+     */
+    events: WebhookEventSetup[];
+  };
 }
 
-export interface SetResponse {
-  message: string;
-}
-
-// Backward compatibility aliases
-export type SetOptions = SetRequest;
+export type SetResponse = WebhookRecord;

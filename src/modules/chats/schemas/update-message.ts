@@ -1,16 +1,14 @@
 // Pure TypeScript interfaces for better IDE support and performance
-import type { ChatId, MessageId } from "@/types/tags";
+import type { ChatId } from "@/types/tags";
+import type { MessageKey, SentMessage } from "./common";
 
 export interface UpdateMessageRequest {
   number: ChatId;
-  messageId: MessageId;
-  message: string;
+  key: MessageKey;
+  /**
+   * New text, or new caption for an image or a video
+   */
+  text: string;
 }
 
-export interface UpdateMessageResponse {
-  status: string;
-  message: string;
-}
-
-// Backward compatibility aliases
-export type UpdateMessageOptions = UpdateMessageRequest; 
+export type UpdateMessageResponse = SentMessage;

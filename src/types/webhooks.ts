@@ -157,6 +157,24 @@ export interface ContactMessage {
   vcard: string;
 }
 
+export interface ContactsArrayMessage {
+  displayName?: string;
+  contacts: ContactMessage[];
+}
+
+export interface LocationMessage {
+  degreesLatitude: number;
+  degreesLongitude: number;
+  name?: string;
+  address?: string;
+}
+
+export interface PollCreationMessage {
+  name: string;
+  options: { optionName: string }[];
+  selectableOptionsCount: number;
+}
+
 export interface ExtendedTextMessage {
   text: string;
   contextInfo?: ContextInfo;
@@ -171,11 +189,16 @@ export type MessageContent = {
   stickerMessage?: StickerMessage;
   ephemeralMessage?: EphemeralMessage;
   videoMessage?: VideoMessage;
+  ptvMessage?: VideoMessage;
   documentMessage?: DocumentMessage;
   contactMessage?: ContactMessage;
-  locationMessage?: any;
+  contactsArrayMessage?: ContactsArrayMessage;
+  locationMessage?: LocationMessage;
   reactionMessage?: ReactionMessage;
-  buttonsMessage?: any;
+  pollCreationMessageV3?: PollCreationMessage;
+  listMessage?: Record<string, unknown>;
+  interactiveMessage?: Record<string, unknown>;
+  buttonsMessage?: Record<string, unknown>;
 };
 
 export interface MessageUpdate {
@@ -196,6 +219,16 @@ export interface ContactPayload {
   pushName: string;
   profilePicUrl: string | null;
   instanceId: string;
+}
+
+/**
+ * Sent once, when the history sync reaches 100%
+ */
+export interface MessagingHistorySetPayload {
+  messageCount: number;
+  chatCount: number;
+  contactCount: number;
+  progress: number;
 }
 
 export interface EphemeralMessage {
@@ -227,7 +260,8 @@ export interface WebhookData {
     | MessagePayload
     | ContactPayload
     | ContactPayload[]
-    | ConnectionUpdatePayload;
+    | ConnectionUpdatePayload
+    | MessagingHistorySetPayload;
   sender: string;
   date?: number;
   instanceName?: string;

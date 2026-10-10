@@ -1,12 +1,9 @@
 // Pure TypeScript interfaces for better IDE support and performance
-import { MediaMessageOptions, MediaMessageResponse } from "./media";
+import type { SentMessageResponse } from "./base";
+import type { MediaMessageOptions } from "./media";
 
 // Request interfaces
 export interface AudioMessageOptions extends MediaMessageOptions {}
 
 // Response interfaces
-export interface AudioMessageResponse extends MediaMessageResponse {
-  message: MediaMessageResponse["message"] & {
-    audioMessage: MediaMessageResponse["message"]["audioMessage"];
-  };
-}
+export type AudioMessageResponse = SentMessageResponse<"audioMessage">;

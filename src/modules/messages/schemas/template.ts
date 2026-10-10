@@ -1,5 +1,5 @@
 // Pure TypeScript interfaces for better IDE support and performance
-import type { ChatId, MessageId } from "@/types/tags";
+import type { BaseMessageOptions, SentMessageResponse } from "./base";
 
 export interface ComponentParameter {
   type: "text" | "image" | "document" | "video";
@@ -15,25 +15,23 @@ export interface Component {
   parameters: ComponentParameter[];
 }
 
-export interface TemplateMessageOptions {
-  number: ChatId;
+/**
+ * Only instances connected to the WhatsApp Business API (Meta) send templates
+ */
+export interface TemplateMessageOptions extends BaseMessageOptions {
+  /**
+   * Name of an approved template
+   */
   name: string;
-  language: {
-    code: string;
-  };
-  components: Component[];
-  options?: {
-    delay?: number;
-    messageId?: MessageId;
-  };
+  /**
+   * Language code of the template, like `en_US` or `pt_BR`
+   */
+  language: string;
+  components?: Component[];
+  /**
+   * URL that receives the events of this message
+   */
+  webhookUrl?: string;
 }
 
-export interface TemplateMessageResponse {
-  key: {
-    remoteJid: ChatId;
-    fromMe: boolean;
-    id: MessageId;
-  };
-  messageTimestamp: string;
-  status: string;
-} 
+export type TemplateMessageResponse = SentMessageResponse;

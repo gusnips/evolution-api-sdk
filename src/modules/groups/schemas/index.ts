@@ -1,24 +1,59 @@
-export type { AcceptInviteCodeOptions, AcceptInviteCodeResponse } from "./accept-invite-code";
 export type {
-	GroupResponse,
-	GroupWithParticipantsResponse,
-	ParticipantResponse,
+  AcceptInviteCodeRequest,
+  AcceptInviteCodeResponse,
+} from "./accept-invite-code";
+export type {
+  GroupMetadataResponse,
+  GroupResponse,
+  GroupWithParticipantsResponse,
+  ParticipantResponse,
 } from "./common";
-export type { CreateGroupOptions, CreateGroupResponse } from "./create";
-export type { FetchInviteCodeOptions, FetchInviteCodeResponse } from "./fetch-invite-code";
+export type { CreateGroupRequest, CreateGroupResponse } from "./create";
 export type {
-	FindAllGroupsResponse,
-	FindAllGroupsWithParticipantsResponse,
+  FetchInviteCodeRequest,
+  FetchInviteCodeResponse,
+} from "./fetch-invite-code";
+export type {
+  FindAllGroupsResponse,
+  FindAllGroupsWithParticipantsResponse,
 } from "./find-all";
 export type { FindGroupByInviteCodeResponse } from "./find-by-invite-code";
 export type { FindGroupByJidResponse } from "./find-by-jid";
-export type { FindMembersOptions, FindMembersResponse } from "./find-members";
-export type { LeaveOptions, LeaveResponse } from "./leave";
-export type { RevokeInviteCodeOptions, RevokeInviteCodeResponse } from "./revoke-invite-code";
-export type { SendGroupInviteOptions, SendGroupInviteResponse } from "./send-group-invite";
-export type { ToggleEphemeralOptions, ToggleEphemeralResponse } from "./toggle-ephemeral";
-export type { UpdateDescriptionOptions, UpdateDescriptionResponse } from "./update-description";
-export type { UpdateMembersOptions, UpdateMembersResponse } from "./update-members";
-export type { UpdatePictureOptions as UpdateGroupPictureOptions, UpdatePictureResponse as UpdateGroupPictureResponse } from "./update-picture";
-export type { UpdateSettingOptions, UpdateSettingResponse } from "./update-setting";
-export type { UpdateSubjectOptions, UpdateSubjectResponse } from "./update-subject";
+export type { FindMembersRequest, FindMembersResponse } from "./find-members";
+export type { LeaveRequest, LeaveResponse } from "./leave";
+export type {
+  RevokeInviteCodeRequest,
+  RevokeInviteCodeResponse,
+} from "./revoke-invite-code";
+export type {
+  SendGroupInviteRequest,
+  SendGroupInviteResponse,
+} from "./send-group-invite";
+export type {
+  ToggleEphemeralRequest,
+  ToggleEphemeralResponse,
+} from "./toggle-ephemeral";
+export type {
+  UpdateDescriptionRequest,
+  UpdateDescriptionResponse,
+} from "./update-description";
+export type {
+  UpdateMemberAddModeRequest,
+  UpdateMemberAddModeResponse,
+} from "./update-member-add-mode";
+export type {
+  UpdateMembersRequest,
+  UpdateMembersResponse,
+} from "./update-members";
+export type {
+  UpdatePictureRequest as UpdateGroupPictureRequest,
+  UpdatePictureResponse as UpdateGroupPictureResponse,
+} from "./update-picture";
+export type {
+  UpdateSettingRequest,
+  UpdateSettingResponse,
+} from "./update-setting";
+export type {
+  UpdateSubjectRequest,
+  UpdateSubjectResponse,
+} from "./update-subject";

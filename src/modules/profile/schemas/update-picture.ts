@@ -6,6 +6,3 @@ export interface UpdatePictureRequest {
 export interface UpdatePictureResponse {
   update: "success" | "error";
 }
-
-// Backward compatibility aliases
-export type UpdatePictureOptions = UpdatePictureRequest; 

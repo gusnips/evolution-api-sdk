@@ -1,12 +1,23 @@
+/**
+ * The `event` field of a webhook payload
+ */
 export enum WebhookEvent {
   APPLICATION_STARTUP = "application.startup",
+  INSTANCE_CREATE = "instance.create",
+  INSTANCE_DELETE = "instance.delete",
+  REMOVE_INSTANCE = "remove.instance",
+  LOGOUT_INSTANCE = "logout.instance",
+  STATUS_INSTANCE = "status.instance",
   QRCODE_UPDATED = "qrcode.updated",
   CONNECTION_UPDATE = "connection.update",
   MESSAGES_SET = "messages.set",
   MESSAGES_UPSERT = "messages.upsert",
+  MESSAGES_EDITED = "messages.edited",
   MESSAGES_UPDATE = "messages.update",
   MESSAGES_DELETE = "messages.delete",
+  MESSAGING_HISTORY_SET = "messaging-history.set",
   SEND_MESSAGE = "send.message",
+  SEND_MESSAGE_UPDATE = "send.message.update",
   CONTACTS_SET = "contacts.set",
   CONTACTS_UPSERT = "contacts.upsert",
   CONTACTS_UPDATE = "contacts.update",
@@ -17,19 +28,40 @@ export enum WebhookEvent {
   CHATS_DELETE = "chats.delete",
   GROUPS_UPSERT = "groups.upsert",
   GROUPS_UPDATE = "groups.update",
-  GROUP_PARTICIPANTS_UPDATE = "group.participants.update",
-  NEW_TOKEN = "new.jwt",
+  GROUP_PARTICIPANTS_UPDATE = "group-participants.update",
+  LABELS_EDIT = "labels.edit",
+  LABELS_ASSOCIATION = "labels.association",
+  CALL = "call",
+  TYPEBOT_START = "typebot.start",
+  TYPEBOT_CHANGE_STATUS = "typebot.change-status",
 }
 
+/**
+ * The names you subscribe with in `webhook.set` and in the `events` list of
+ * `instances.create`. They are the payload names in upper case, with one
+ * exception: the server accepts `GROUP_UPDATE`, but it sends group changes
+ * as `groups.update`, which becomes `GROUPS_UPDATE`. That name is never in a
+ * subscription list, so in the server source (`develop`, July 2026) group
+ * changes reach no webhook or event channel. `GROUPS_UPSERT` and
+ * `GROUP_PARTICIPANTS_UPDATE` work.
+ */
 export enum WebhookEventSetup {
   APPLICATION_STARTUP = "APPLICATION_STARTUP",
+  INSTANCE_CREATE = "INSTANCE_CREATE",
+  INSTANCE_DELETE = "INSTANCE_DELETE",
+  REMOVE_INSTANCE = "REMOVE_INSTANCE",
+  LOGOUT_INSTANCE = "LOGOUT_INSTANCE",
+  STATUS_INSTANCE = "STATUS_INSTANCE",
   QRCODE_UPDATED = "QRCODE_UPDATED",
   CONNECTION_UPDATE = "CONNECTION_UPDATE",
   MESSAGES_SET = "MESSAGES_SET",
   MESSAGES_UPSERT = "MESSAGES_UPSERT",
+  MESSAGES_EDITED = "MESSAGES_EDITED",
   MESSAGES_UPDATE = "MESSAGES_UPDATE",
   MESSAGES_DELETE = "MESSAGES_DELETE",
+  MESSAGING_HISTORY_SET = "MESSAGING_HISTORY_SET",
   SEND_MESSAGE = "SEND_MESSAGE",
+  SEND_MESSAGE_UPDATE = "SEND_MESSAGE_UPDATE",
   CONTACTS_SET = "CONTACTS_SET",
   CONTACTS_UPSERT = "CONTACTS_UPSERT",
   CONTACTS_UPDATE = "CONTACTS_UPDATE",
@@ -39,15 +71,11 @@ export enum WebhookEventSetup {
   CHATS_UPSERT = "CHATS_UPSERT",
   CHATS_DELETE = "CHATS_DELETE",
   GROUPS_UPSERT = "GROUPS_UPSERT",
-  GROUPS_UPDATE = "GROUPS_UPDATE",
+  GROUP_UPDATE = "GROUP_UPDATE",
   GROUP_PARTICIPANTS_UPDATE = "GROUP_PARTICIPANTS_UPDATE",
-  NEW_TOKEN = "NEW_TOKEN",
-  MESSAGES_EDITED = "MESSAGES_EDITED",
   LABELS_EDIT = "LABELS_EDIT",
   LABELS_ASSOCIATION = "LABELS_ASSOCIATION",
   CALL = "CALL",
   TYPEBOT_START = "TYPEBOT_START",
   TYPEBOT_CHANGE_STATUS = "TYPEBOT_CHANGE_STATUS",
-  ERRORS = "ERRORS",
-  ERRORS_WEBHOOK = "ERRORS_WEBHOOK",
 }

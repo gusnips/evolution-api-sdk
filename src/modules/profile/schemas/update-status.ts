@@ -4,8 +4,5 @@ export interface UpdateStatusRequest {
 }
 
 export interface UpdateStatusResponse {
-  status: string;
+  update: "success";
 }
-
-// Backward compatibility aliases
-export type UpdateStatusOptions = UpdateStatusRequest; 

@@ -1,17 +1,14 @@
-import type { ChatId } from "@/types/tags";
-
-interface Message {
-  remoteJid: string;
-  fromMe: boolean;
-  id: string;
-}
+import type { LastMessage } from "./common";
 
 export interface MarkAsUnreadRequest {
-  lastMessage: Message[];
-  chat: ChatId;
+  /**
+   * Number or JID of the chat. Its last message is used when `lastMessage` is not set
+   */
+  chat?: string;
+  lastMessage?: LastMessage;
 }
 
 export interface MarkAsUnreadResponse {
-  message: string;
-  unread: "success" | "error";
+  chatId: string;
+  markedChatUnread: boolean;
 }

@@ -1,5 +1,10 @@
 export enum MessageUpdateStatus {
+  ERROR = "ERROR",
+  PENDING = "PENDING",
+  SERVER_ACK = "SERVER_ACK",
   DELIVERY_ACK = "DELIVERY_ACK",
   READ = "READ",
-  SERVER_ACK = "SERVER_ACK",
+  PLAYED = "PLAYED",
+  EDITED = "EDITED",
+  DELETED = "DELETED",
 }

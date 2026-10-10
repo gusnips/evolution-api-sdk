@@ -8,18 +8,27 @@ import type {
 
 export interface FindMessagesRequest {
   where: {
-    key: {
+    id?: string;
+    source?: string;
+    messageType?: string;
+    /**
+     * Both dates are needed, otherwise the filter is ignored
+     */
+    messageTimestamp?: {
+      lte: string;
+      gte: string;
+    };
+    key?: {
       id?: string;
       fromMe?: boolean;
       remoteJid?: string;
       participants?: string;
-      messageTimestamp?: {
-        lte: string;
-        gte: string;
-      };
     };
   };
   page?: number;
+  /**
+   * Messages per page. Defaults to 50
+   */
   offset?: number;
 }
 
@@ -49,7 +58,3 @@ export interface FindMessagesResponse {
     records: ResponseMessage[];
   };
 }
-
-// Backward compatibility aliases
-export type FindMessagesOptions = FindMessagesRequest;
-export type Message = ResponseMessage;

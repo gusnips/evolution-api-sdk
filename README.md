@@ -18,13 +18,13 @@
 
 ```bash
 npm install evolution-api-sdk
-// or
+# or
 yarn add evolution-api-sdk
-// or
+# or
 bun add evolution-api-sdk
 ```
 
-## Getting Started
+## Getting started
 
 ```ts
 import { EvolutionClient } from "evolution-api-sdk";
@@ -36,9 +36,32 @@ const client = new EvolutionClient({
 });
 ```
 
-## Usage Examples
+The types follow the Evolution API source at its `develop` branch (July 2026, commit `e273b90`), which is newer than the 2.3.7 release. A route or field can be missing on an older server.
 
-### Sending a Text Message
+### Activating a 2.4 server
+
+Evolution API 2.4 answers no request until the server is activated. Until then, every call fails with status 503. The error message holds the address to open:
+
+> This Evolution API instance is not activated. Open https://your-host/manager/login to activate, or set AUTHENTICATION_API_KEY in your .env with a valid licensing key.
+
+The easiest way is to open that address in a browser and fill in the form. To do it from code, use `client.license`. These three calls work before activation:
+
+```ts
+const { status } = await client.license.status(); // "active" or "inactive"
+
+// Get the address of the registration form
+const registration = await client.license.register();
+if (registration.status === "pending") console.log(registration.register_url);
+
+// When the form is done, the server redirects with ?code=... in the address
+await client.license.activate({ code: "code-from-the-redirect" });
+```
+
+Servers older than 2.4 have no `/license` routes and answer 404.
+
+## Usage examples
+
+### Sending a text message
 
 ```ts
 client.setInstance("my-instance-01");
@@ -49,561 +72,683 @@ await client.messages.sendText({
 });
 ```
 
-### Using Different Instances
+### Using different instances
 
-You can override the default instance for any method call:
+Every method takes `{ instance: "name" }` as its last argument. It overrides the default instance for that call:
 
 ```ts
-// Send message using a different instance
 await client.messages.sendText(
   {
     number: "5511999999999",
     text: "Hello from another instance!",
   },
-  { instance: "different-instance-name" }
+  { instance: "different-instance-name" },
 );
 
-// Check numbers on a specific instance
 await client.chats.check(["5511999999999"], { instance: "my-instance" });
-
-// Works with all methods across all modules
-await client.groups.create(
-  {
-    subject: "My Group",
-    participants: ["5511999999999"],
-  },
-  { instance: "work-instance" }
-);
-
-await client.profile.updateName(
-  {
-    name: "New Name",
-  },
-  { instance: "personal-instance" }
-);
 ```
 
-### Sending an Image
+### Sending an image
 
 ```ts
 await client.messages.sendImage({
   number: "5511999999999",
-  image: "https://i.imgur.com/REo1ODy.png",
+  media: "https://i.imgur.com/REo1ODy.png",
   caption: "A cute cat",
 });
 ```
 
-### Creating a Group
+`media` takes a URL or the file as base64.
+
+### Creating a group
+
+`ChatId` marks a string as a chat id. The SDK exports it, with `MessageId` and `GroupInviteCode`, for the fields that need one.
 
 ```ts
+import { ChatId } from "evolution-api-sdk";
+
 await client.groups.create({
   subject: "My Awesome Group",
-  participants: ["5511999999999", "5522988888888"],
+  participants: [ChatId("5511999999999"), ChatId("5522988888888")],
 });
 ```
 
-### Checking if a Number has WhatsApp
+### Checking if a number has WhatsApp
 
 ```ts
 const result = await client.chats.check(["5511999999999"]);
 console.log(result);
-// [{ jid: '5511999999999@s.whatsapp.net', exists: true }]
+// [{ exists: true, jid: "5511999999999@s.whatsapp.net", number: "5511999999999" }]
 ```
 
-## API Reference
+## Responses and errors
 
-> **💡 Pro Tip:** All methods support an optional `{ instance: "instance-name" }` parameter to override the default instance.
+Responses are the JSON the server sends. The SDK types describe it as is and renames nothing.
 
-### 🔧 Instance Management
-
-#### Create Instance
+A failed request throws `EvolutionApiError`. It has `message`, `statusCode` and `details`:
 
 ```ts
-await client.instance.create({
+import { EvolutionApiError } from "evolution-api-sdk";
+
+try {
+  await client.messages.sendText({ number: "5511999999999", text: "Hi" });
+} catch (error) {
+  if (error instanceof EvolutionApiError) {
+    console.error(error.statusCode, error.message);
+  }
+}
+```
+
+Some calls answer 200 and put the failure in the body: `instances.connect`, `instances.restart` and the `business` calls. Their response types are unions, so you have to check the body before you use it.
+
+## API reference
+
+### Instances
+
+`client.instances`
+
+```ts
+// Create an instance. `integration` is required.
+const created = await client.instances.create({
   instanceName: "my-bot",
-  token: "optional-token",
+  integration: "WHATSAPP-BAILEYS",
+  qrcode: true, // the server waits 5 seconds for the QR code
 });
-```
+// created.hash is the API key of the new instance
+// created.qrcode?.base64 is the QR code image
 
-#### Setting the default Instance
+// Connect. The answer is a QR code, the connection state, or an error.
+const result = await client.instances.connect({ instanceName: "my-bot" });
+if ("error" in result) throw new Error(result.message);
+if ("base64" in result) console.log(result.base64);
 
-```ts
-await client.setInstance("InstanceName");
-```
-
-#### Connect to Instance
-
-```ts
-await client.instance.connect({ instanceName: "my-bot" });
-```
-
-#### Get Connection State
-
-```ts
-const state = await client.instance.connectionState({ instanceName: "my-bot" });
-```
-
-#### Manage Instance
-
-```ts
-// Logout
-await client.instance.logout({ instanceName: "my-bot" });
-
-// Restart
-await client.instance.restart({ instanceName: "my-bot" });
-
-// Delete
-await client.instance.delete({ instanceName: "my-bot" });
-
-// List all instances
-const instances = await client.instance.fetchAll();
-
-// Set presence
-await client.instance.setPresence({
+// Ask for a pairing code instead of a QR code
+await client.instances.connect({
   instanceName: "my-bot",
-  presence: "available",
+  number: "5511999999999",
 });
+
+// Connection state: "open", "connecting" or "close"
+const { instance } = await client.instances.connectionState({
+  instanceName: "my-bot",
+});
+console.log(instance.state);
+
+// List instances. With the global API key and no filter you get all of them.
+const instances = await client.instances.fetchAll();
+const one = await client.instances.fetchAll({ instanceName: "my-bot" });
+
+await client.instances.setPresence({
+  instanceName: "my-bot",
+  presence: "available", // or unavailable, composing, recording, paused
+});
+
+await client.instances.restart({ instanceName: "my-bot" });
+await client.instances.logout({ instanceName: "my-bot" });
+await client.instances.delete({ instanceName: "my-bot" });
 ```
 
----
+To make the later calls use one instance, call `client.setInstance("my-bot")`.
 
-### 💬 Chat Operations
+`create` also takes the instance settings (`rejectCall`, `groupsIgnore` and the others), a proxy (`proxyHost`, `proxyPort`, `proxyProtocol`), event channels (`webhook`, `websocket`, `rabbitmq`, `nats`, `sqs`, `pusher`, `kafka`) and Chatwoot fields. The type has a note on each one.
 
-#### Check WhatsApp Numbers
+### Chats
 
-```ts
-const result = await client.chats.check(["5511999999999", "5522888888888"]);
-// Override instance: client.chats.check(numbers, { instance: "my-instance" })
-```
-
-#### Get All Chats
+`client.chats`
 
 ```ts
+import { ChatId } from "evolution-api-sdk";
+
+const numbers = await client.chats.check(["5511999999999", "5522888888888"]);
 const chats = await client.chats.findAll();
-```
 
-#### Chat Actions
-
-```ts
-client.setInstance("my-instance-01");
-// Update presence
 await client.chats.updatePresence({
   number: "5511999999999",
   presence: "composing",
   delay: 1000,
 });
 
-// Mark as read
 await client.chats.markAsRead({
-  remoteJid: "5511999999999@s.whatsapp.net",
-  fromMe: false,
-  id: "message-id",
+  readMessages: [
+    {
+      remoteJid: "5511999999999@s.whatsapp.net",
+      fromMe: false,
+      id: "message-id",
+    },
+  ],
 });
 
-// Archive chat
+// Mark received voice messages as played
+await client.chats.markAsPlayed({
+  playedMessages: [
+    {
+      remoteJid: "5511999999999@s.whatsapp.net",
+      fromMe: false,
+      id: "message-id",
+    },
+  ],
+});
+
+await client.chats.markAsUnread({ chat: "5511999999999@s.whatsapp.net" });
+
 await client.chats.archive({
-  remoteJid: "5511999999999@s.whatsapp.net",
+  chat: "5511999999999@s.whatsapp.net",
   archive: true,
+});
+
+await client.chats.updateBlockStatus({
+  number: ChatId("5511999999999"),
+  status: "block", // or "unblock"
 });
 ```
 
-#### Message Management
+#### Messages
 
 ```ts
-// Delete message
 await client.chats.deleteMessage({
   remoteJid: "5511999999999@s.whatsapp.net",
   fromMe: true,
   id: "message-id",
 });
 
-// Find messages
-const messages = await client.chats.findMessages({
-  where: {
-    key: {
-      remoteJid: "5511999999999@s.whatsapp.net",
-    },
-  },
-  offset: 10, // limit
-  page: 1,
-});
-
-// Update message
 await client.chats.updateMessage({
-  remoteJid: "5511999999999@s.whatsapp.net",
-  fromMe: true,
-  id: "message-id",
+  number: ChatId("5511999999999"),
+  key: {
+    remoteJid: "5511999999999@s.whatsapp.net",
+    fromMe: true,
+    id: "message-id",
+  },
   text: "Updated message",
 });
 
-// Get base64 from media message
-const mediaBase64 = await client.chats.getBase64FromMediaMessage({
-  message: {
-    key: {
-      id: "message-id",
-    },
-  },
-  convertToMp4: true, // Optional: Convert video to MP4
+const { messages } = await client.chats.findMessages({
+  where: { key: { remoteJid: "5511999999999@s.whatsapp.net" } },
+  offset: 10, // records per page
+  page: 1,
 });
+console.log(messages.total, messages.records);
 
-// Response format:
-// {
-//   "mediaType": "audioMessage",
-//   "fileName": "3A3B333C3EC7505284A8.oga",
-//   "size": {"fileLength": "7905"},
-//   "mimetype": "audio/mp4",
-//   "base64": "AAAAIGZ0eXBpc2....=",
-//   "buffer": null
-// }
+const media = await client.chats.getBase64FromMediaMessage({
+  message: { key: { id: "message-id" } },
+  convertToMp4: true, // optional, for video
+});
+// { mediaType, fileName, size: { fileLength }, mimetype, base64, buffer }
+
+const { poll } = await client.chats.getPollVote({
+  message: { key: { id: "poll-message-id" } },
+  remoteJid: "5511999999999@s.whatsapp.net",
+});
+// poll.results: { "Option A": { votes: 2, voters: [...] }, ... }
 ```
 
-#### Contact & Profile
+#### Contacts and channels
 
 ```ts
-// Fetch profile picture
-const profilePic = await client.chats.fetchProfilePicture({
-  number: "5511999999999",
+const { profilePictureUrl } = await client.chats.fetchProfilePicture({
+  number: ChatId("5511999999999"),
 });
 
-// Find contacts
 const contacts = await client.chats.findContacts({
-  where: { name: "John" },
+  where: { pushName: "John" },
 });
+
+const chat = await client.chats.findChatByRemoteJid({
+  remoteJid: "5511999999999@s.whatsapp.net",
+}); // null when there is no such chat
+
+const channels = await client.chats.findChannels({ page: 1, limit: 20 });
 ```
 
----
+### Messages
 
-### 📱 Messaging
+`client.messages`
 
-#### Text Messages
+Every send method takes `number` and these options: `delay` (milliseconds), `quoted`, `linkPreview`, `mentionsEveryOne`, `mentioned` and `messageId`. Each call returns the sent message: `key`, `message`, `messageType`, `messageTimestamp` and more.
+
+#### Text and media
 
 ```ts
 await client.messages.sendText({
   number: "5511999999999",
-  text: "Hello! 👋",
+  text: "Hello!",
 });
-```
 
-#### Media Messages
-
-```ts
-// Send image
 await client.messages.sendImage({
   number: "5511999999999",
-  image: "https://example.com/image.jpg",
-  caption: "Check this out!",
+  media: "https://example.com/image.jpg",
+  caption: "Check this out",
 });
 
-// Send video
 await client.messages.sendVideo({
   number: "5511999999999",
-  video: "https://example.com/video.mp4",
-  caption: "Amazing video!",
+  media: "https://example.com/video.mp4",
+  caption: "Amazing video",
 });
 
-// Send document
+// Send a video as a looping GIF
+await client.messages.sendVideo({
+  number: "5511999999999",
+  media: "https://example.com/clip.mp4",
+  gifPlayback: true,
+});
+
 await client.messages.sendDocument({
   number: "5511999999999",
-  document: "https://example.com/document.pdf",
+  media: "https://example.com/document.pdf",
   fileName: "report.pdf",
 });
 
-// Send audio
 await client.messages.sendAudio({
   number: "5511999999999",
-  audio: "https://example.com/audio.mp3",
+  media: "https://example.com/audio.mp3",
+});
+
+// A voice message, shown as a recording
+await client.messages.sendVoice({
+  number: "5511999999999",
+  audio: "https://example.com/voice.ogg",
+});
+
+// A round video
+await client.messages.sendPtv({
+  number: "5511999999999",
+  video: "https://example.com/round.mp4",
+});
+
+await client.messages.sendSticker({
+  number: "5511999999999",
+  sticker: "https://example.com/sticker.webp",
 });
 ```
 
-#### Interactive Messages
+#### Location, contacts and reactions
 
 ```ts
-// Send location
+import { ChatId, MessageId } from "evolution-api-sdk";
+
 await client.messages.sendLocation({
   number: "5511999999999",
-  latitude: -23.5505,
-  longitude: -46.6333,
-  name: "São Paulo",
+  name: "Avenida Paulista",
+  address: "Av. Paulista, São Paulo",
+  latitude: -23.5614,
+  longitude: -46.6559,
 });
 
-// Send contact
 await client.messages.sendContact({
   number: "5511999999999",
-  contact: [
-    {
-      fullName: "John Doe",
-      phones: ["5511999999999"],
-    },
-  ],
+  contact: [{ fullName: "John Doe", phoneNumber: "5522988888888" }],
 });
 
-// Send reaction
 await client.messages.sendReaction({
-  reactionMessage: {
-    key: { remoteJid: "5511999999999@s.whatsapp.net", id: "message-id" },
-    text: "👍",
+  key: {
+    remoteJid: ChatId("5511999999999@s.whatsapp.net"),
+    fromMe: false,
+    id: MessageId("message-id"),
   },
+  reaction: "👍",
 });
 ```
 
-#### Advanced Messages
+#### Polls, lists, buttons and carousels
 
 ```ts
-// Send list
+await client.messages.sendPoll({
+  number: "5511999999999",
+  name: "Lunch?",
+  selectableCount: 1,
+  values: ["Pizza", "Sushi", "Salad"],
+});
+
 await client.messages.sendList({
   number: "5511999999999",
   title: "Choose an option",
   description: "Select from the options below",
+  footerText: "Tap the button to see them",
+  buttonText: "Options",
   sections: [
     {
       title: "Options",
       rows: [
-        { title: "Option 1", description: "First option" },
-        { title: "Option 2", description: "Second option" },
+        { rowId: "1", title: "Option 1", description: "First option" },
+        { rowId: "2", title: "Option 2", description: "Second option" },
       ],
     },
   ],
 });
 
-// Send template
+// Up to 3 reply buttons. Or up to 2 of url, call and copy. Or one pix. Never a mix.
+await client.messages.sendButtons({
+  number: "5511999999999",
+  title: "Order ready",
+  description: "Do you want it delivered?",
+  buttons: [
+    { type: "reply", displayText: "Yes", id: "yes" },
+    { type: "reply", displayText: "No", id: "no" },
+  ],
+});
+
+// From 1 to 10 cards, each with 1 to 3 buttons
+await client.messages.sendCarousel({
+  number: "5511999999999",
+  body: "This week's offers",
+  cards: [
+    {
+      title: "Coffee",
+      body: "20% off",
+      imageUrl: "https://example.com/coffee.jpg",
+      buttons: [
+        { type: "url", displayText: "Open", url: "https://example.com" },
+      ],
+    },
+  ],
+});
+```
+
+#### Status and templates
+
+```ts
+await client.messages.sendStatus({
+  type: "text",
+  content: "Open until 6 pm",
+  backgroundColor: "#008000",
+  font: 1,
+  allContacts: true,
+});
+
+// Templates work on WHATSAPP-BUSINESS instances only
 await client.messages.sendTemplate({
   number: "5511999999999",
-  template: {
-    name: "hello_world",
-    language: { code: "en_US" },
-  },
+  name: "hello_world",
+  language: "en_US",
 });
 ```
 
----
+### Groups
 
-### 👥 Group Management
-
-#### Group Operations
+`client.groups`
 
 ```ts
-// Create group
-await client.groups.create({
+import { ChatId, GroupInviteCode } from "evolution-api-sdk";
+
+const group = await client.groups.create({
   subject: "My Awesome Group",
-  participants: ["5511999999999", "5522888888888"],
+  description: "Where we talk",
+  participants: [ChatId("5511999999999")],
 });
 
-// Get all groups
 const groups = await client.groups.findAll(false); // without participants
-const groupsWithMembers = await client.groups.findAll(true); // with participants
+const withMembers = await client.groups.findAll(true); // with participants
+const byJid = await client.groups.findByJid("group-id@g.us");
+const byCode = await client.groups.findByInviteCode("invite-code");
 
-// Find group by invite code
-const group = await client.groups.findByInviteCode("invite-code-here");
-
-// Find group by JID
-const group = await client.groups.findByJid("group-id@g.us");
-```
-
-#### Group Settings
-
-```ts
-// Update group subject
 await client.groups.updateSubject({
   groupJid: "group-id@g.us",
-  subject: "New Group Name",
+  subject: "New name",
 });
-
-// Update group description
 await client.groups.updateDescription({
   groupJid: "group-id@g.us",
-  description: "New group description",
+  description: "New description",
 });
-
-// Update group picture
 await client.groups.updatePicture({
   groupJid: "group-id@g.us",
   image: "https://example.com/group-pic.jpg",
 });
 ```
 
-#### Group Members
+#### Members and settings
 
 ```ts
-// Add/remove members
 await client.groups.updateMembers({
   groupJid: "group-id@g.us",
-  action: "add",
+  action: "add", // or remove, promote, demote
   participants: ["5511999999999"],
 });
 
-// Get group members
-const members = await client.groups.findMembers({
+const { participants } = await client.groups.findMembers({
   groupJid: "group-id@g.us",
 });
 
-// Leave group
-await client.groups.leave({
+// Who can send messages: "announcement" is admins only
+await client.groups.updateSetting({
   groupJid: "group-id@g.us",
+  action: "announcement", // or not_announcement, locked, unlocked
 });
+
+// Who can add members
+await client.groups.updateMemberAddMode({
+  groupJid: "group-id@g.us",
+  mode: "admin_add", // or all_member_add
+});
+
+// Disappearing messages: 0 (off), 86400 (1 day), 604800 (7 days), 7776000 (90 days)
+await client.groups.toggleEphemeral({
+  groupJid: "group-id@g.us",
+  expiration: 604800,
+});
+
+await client.groups.leave({ groupJid: "group-id@g.us" });
 ```
 
-#### Group Invites
+#### Invites
 
 ```ts
-// Get invite code
-const inviteCode = await client.groups.fetchInviteCode({
+const { inviteUrl, inviteCode } = await client.groups.fetchInviteCode({
   groupJid: "group-id@g.us",
 });
 
-// Revoke invite code
-await client.groups.revokeInviteCode({
+await client.groups.revokeInviteCode({ groupJid: "group-id@g.us" });
+
+await client.groups.sendGroupInvite({
   groupJid: "group-id@g.us",
+  description: "Join us",
+  numbers: ["5511999999999"],
 });
 
-// Accept invite
 await client.groups.acceptInviteCode({
-  inviteCode: "invite-code-here",
+  inviteCode: GroupInviteCode("invite-code"),
 });
 ```
 
----
+### Profile
 
-### 👤 Profile Management
-
-#### Profile Information
+`client.profile`
 
 ```ts
-// Get profile
-const profile = await client.profile.fetchProfile({
+const profile = await client.profile.fetchProfile({ number: "5511999999999" });
+
+// The answer depends on `isBusiness`
+const business = await client.profile.fetchBusinessProfile({
   number: "5511999999999",
 });
+if (business.isBusiness) console.log(business.description, business.website);
 
-// Get business profile
-const businessProfile = await client.profile.fetchBusinessProfile({
-  number: "5511999999999",
-});
-```
+const { lid } = await client.profile.fetchLid({ number: "5511999999999" });
 
-#### Update Profile
-
-```ts
-// Update name
-await client.profile.updateName({
-  name: "My New Name",
-});
-
-// Update status
-await client.profile.updateStatus({
-  status: "Hey there! I'm using WhatsApp",
-});
-
-// Update picture
+await client.profile.updateName({ name: "My new name" });
+await client.profile.updateStatus({ status: "Available" });
 await client.profile.updatePicture({
   picture: "https://example.com/my-photo.jpg",
 });
-
-// Remove picture
 await client.profile.removePicture();
 ```
 
-#### Privacy Settings
+#### Privacy settings
 
 ```ts
-// Get privacy settings
 const privacy = await client.profile.fetchPrivacySettings();
 
-// Update privacy settings
+// Send all six fields
 await client.profile.updatePrivacySettings({
-  privacySettings: {
-    readReceipts: "all",
-    profile: "contacts",
-    status: "contacts",
-    online: "all",
-    last: "contacts",
-    groupAdd: "contacts",
-  },
+  readreceipts: "all", // all or none
+  profile: "contacts", // all, contacts, contact_blacklist or none
+  status: "contacts",
+  online: "all", // all or match_last_seen
+  last: "contacts",
+  groupadd: "contacts",
 });
 ```
 
----
+### Settings
 
-### ⚙️ Settings & Webhooks
-
-#### Instance Settings
+`client.settings`
 
 ```ts
-// Get settings
-const settings = await client.settings.find();
+const settings = await client.settings.find(); // null when nothing is saved
 
-// Update settings
+// Send the six booleans. `msgCall` is the text sent when a call is rejected.
 await client.settings.set({
-  reject_call: true,
-  msg_call: "Sorry, I can't take calls right now",
-  groups_ignore: false,
+  rejectCall: true,
+  msgCall: "Sorry, I can't take calls right now",
+  groupsIgnore: false,
+  alwaysOnline: false,
+  readMessages: false,
+  readStatus: false,
+  syncFullHistory: false,
 });
 ```
 
-#### Webhook Configuration
+### Webhook
+
+`client.webhook`
 
 ```ts
-// Get webhook settings
-const webhook = await client.webhook.find();
+import { WebhookEventSetup } from "evolution-api-sdk";
 
-// Set webhook
+const webhook = await client.webhook.find(); // null when nothing is saved
+
 await client.webhook.set({
-  url: "https://your-webhook-url.com/webhook",
-  webhook_by_events: true,
-  events: ["MESSAGES_UPSERT", "CONNECTION_UPDATE"],
+  webhook: {
+    enabled: true,
+    url: "https://your-domain.com/webhook",
+    byEvents: false, // true adds the event name to the end of the url
+    base64: false, // true sends media as base64
+    events: [
+      WebhookEventSetup.MESSAGES_UPSERT,
+      WebhookEventSetup.MESSAGES_UPDATE,
+      WebhookEventSetup.CONNECTION_UPDATE,
+    ], // an empty list subscribes to every event
+  },
 });
 ```
 
----
+### Event channels
 
-### 🔄 Instance Override Examples
-
-You can override the default instance for any method:
+`client.websocket`, `client.rabbitmq`, `client.nats`, `client.sqs`, `client.kafka` and `client.pusher` send the events of an instance somewhere else than a webhook. They all work the same way:
 
 ```ts
-// Send message with different instance
-await client.messages.sendText(
-  {
-    number: "5511999999999",
-    text: "Hello from work bot!",
-  },
-  { instance: "work-instance" }
-);
+await client.rabbitmq.set({
+  enabled: true,
+  events: [WebhookEventSetup.MESSAGES_UPSERT], // [] subscribes to every event
+});
 
-// Check numbers on personal instance
-await client.chats.check(["5511999999999"], { instance: "personal-bot" });
+const rabbitmq = await client.rabbitmq.find(); // null when nothing is saved
 
-// Create group on specific instance
-await client.groups.create(
-  {
-    subject: "Team Meeting",
-    participants: ["5511999999999"],
-  },
-  { instance: "team-bot" }
-);
+// Pusher also needs its app details
+await client.pusher.set({
+  enabled: true,
+  events: [],
+  appId: "app-id",
+  key: "key",
+  secret: "secret",
+  cluster: "eu",
+  useTLS: true,
+});
 ```
 
----
+The server has to switch each channel on first (`RABBITMQ_ENABLED=true`, `WEBSOCKET_ENABLED=true` and so on). When it did not, the server answers with an empty body and the SDK throws "Network or parsing error".
 
-### 🔗 Webhook Integration
+### Labels
 
-The SDK provides complete TypeScript support for handling webhooks from the Evolution API.
+`client.labels`. Works on `WHATSAPP-BAILEYS` instances.
 
-#### Basic Webhook Setup
+```ts
+// Each label has an `id`, a `name` and a `color`
+const labels = await client.labels.findAll();
+
+await client.labels.handle({
+  number: "5511999999999",
+  labelId: "label-id",
+  action: "add", // or "remove"
+});
+```
+
+### Proxy
+
+`client.proxy`
+
+```ts
+// The server connects through the proxy once and rejects it if that fails.
+// `protocol` is http, socks or socks5. Use "" for username and password when there is no login.
+await client.proxy.set({
+  enabled: true,
+  host: "proxy.example.com",
+  port: "8080",
+  protocol: "http",
+  username: "",
+  password: "",
+});
+
+const proxy = await client.proxy.find(); // null when nothing is saved
+```
+
+### Templates
+
+`client.templates`. Message templates live on Meta's side, so this works on `WHATSAPP-BUSINESS` instances only.
+
+```ts
+await client.templates.create({
+  name: "order_ready",
+  category: "UTILITY",
+  language: "en_US",
+  components: [{ type: "BODY", text: "Your order is ready." }],
+});
+
+const templates = await client.templates.find();
+
+await client.templates.edit({
+  templateId: templates[0].id,
+  components: [{ type: "BODY", text: "Your order is ready for pickup." }],
+});
+
+await client.templates.delete({ name: "order_ready" });
+```
+
+### Business
+
+`client.business`. Reads a business account's catalog.
+
+```ts
+const catalog = await client.business.getCatalog({ number: "5511999999999" });
+if ("catalog" in catalog) console.log(catalog.catalogLength, catalog.catalog);
+
+const collections = await client.business.getCollections({
+  number: "5511999999999",
+});
+```
+
+Leave `number` out to read the catalog of the connected account. When the server cannot read the catalog it answers 200 with `isBusiness: false` and no `catalog`.
+
+## Webhook integration
+
+The SDK types the payloads the server posts to your webhook.
+
+### Basic setup
 
 ```ts
 import express from "express";
 import {
+  ConnectionState,
+  ConnectionUpdatePayload,
+  ContactPayload,
+  MessagePayload,
+  MessageUpdateStatus,
   WebhookData,
   WebhookEvent,
-  WebhookEventSetup,
-  MessagePayload,
-  ContactPayload,
-  ConnectionUpdatePayload,
 } from "evolution-api-sdk";
 
 const app = express();
 app.use(express.json());
 
-// Webhook endpoint
 app.post("/webhook", async (req, res) => {
   try {
     const webhookData: WebhookData = req.body;
@@ -620,13 +765,13 @@ app.listen(3000, () => {
 });
 ```
 
-#### Processing Webhook Events
+### Processing events
+
+`WebhookEvent` holds the values of the `event` field (`messages.upsert`).
 
 ```ts
 async function processWebhook(webhookData: WebhookData): Promise<void> {
   const { event, instance, data } = webhookData;
-
-  console.log(`[WEBHOOK] Event: ${event} | Instance: ${instance}`);
 
   switch (event) {
     case WebhookEvent.MESSAGES_UPSERT:
@@ -634,7 +779,7 @@ async function processWebhook(webhookData: WebhookData): Promise<void> {
       break;
 
     case WebhookEvent.MESSAGES_UPDATE:
-      await handleMessageUpdate(data as MessagePayload, instance);
+      await handleMessageUpdate(data as MessagePayload);
       break;
 
     case WebhookEvent.CONNECTION_UPDATE:
@@ -643,251 +788,149 @@ async function processWebhook(webhookData: WebhookData): Promise<void> {
 
     case WebhookEvent.CONTACTS_UPSERT:
     case WebhookEvent.CONTACTS_UPDATE:
-      await handleContact(data as ContactPayload, instance);
+      await handleContact(data as ContactPayload);
       break;
 
     case WebhookEvent.QRCODE_UPDATED:
-      console.log(`[WEBHOOK] QR Code updated for instance: ${instance}`);
+      console.log(`New QR code for ${instance}`);
       break;
 
     default:
-      console.log(`[WEBHOOK] Unhandled event: ${event}`);
+      console.log(`Unhandled event: ${event}`);
   }
 }
 ```
 
-#### Message Handling Examples
+### Handling messages
 
 ```ts
 async function handleNewMessage(
   messageData: MessagePayload,
-  instance: string
+  instance: string,
 ): Promise<void> {
   const { key, message, pushName } = messageData;
 
-  // Skip messages from groups (optional)
-  if (key.remoteJid?.includes("@g.us")) {
-    console.log("Skipping group message");
-    return;
-  }
-
-  // Skip messages sent by bot itself
-  if (key.fromMe) {
-    console.log("Skipping outgoing message");
-    return;
-  }
+  // Skip groups and messages sent by this instance
+  if (key.remoteJid.includes("@g.us") || key.fromMe) return;
 
   const from = key.remoteJid;
-  const messageId = key.id;
   const contactName = pushName || "Unknown";
 
-  console.log(`Message from ${contactName} (${from}): ${messageId}`);
-
-  // Process different message types
   if (message?.conversation) {
-    // Text message
     const text = message.conversation;
-    console.log(`Text: ${text}`);
+    console.log(`${contactName} (${from}): ${text}`);
 
-    // Auto-reply example
     if (text.toLowerCase() === "hello") {
       await client.messages.sendText(
         {
           number: from.replace("@s.whatsapp.net", ""),
           text: "Hello! How can I help you?",
         },
-        { instance }
+        { instance },
       );
     }
   } else if (message?.imageMessage) {
-    // Image message
-    console.log(`Received image from ${contactName}`);
-    const imageUrl = message.imageMessage.url;
-    // Process image...
+    console.log(`${contactName} sent an image`);
   } else if (message?.audioMessage) {
-    // Audio message
-    console.log(`Received audio from ${contactName}`);
-    // Process audio...
+    console.log(`${contactName} sent an audio`);
   }
 }
 
-async function handleMessageUpdate(
-  messageData: MessagePayload,
-  instance: string
-): Promise<void> {
+async function handleMessageUpdate(messageData: MessagePayload): Promise<void> {
   const { key, status } = messageData;
-  console.log(`Message ${key.id} status updated to: ${status}`);
 
-  // Handle read receipts, delivery confirmations, etc.
   switch (status) {
+    case MessageUpdateStatus.SERVER_ACK:
+      console.log(`${key.id} reached the server`);
+      break;
     case MessageUpdateStatus.DELIVERY_ACK:
-      console.log("Message delivered");
+      console.log(`${key.id} was delivered`);
       break;
     case MessageUpdateStatus.READ:
-      console.log("Message read by recipient");
-      break;
-    case MessageUpdateStatus.SERVER_ACK:
-      console.log("Message sent to server");
+      console.log(`${key.id} was read`);
       break;
   }
 }
 
 async function handleConnectionUpdate(
-  connectionData: ConnectionUpdatePayload
+  connectionData: ConnectionUpdatePayload,
 ): Promise<void> {
   const { instance, state, statusReason } = connectionData;
 
-  console.log(`Instance ${instance} connection state: ${state}`);
-
   switch (state) {
-    case "open":
-      console.log(`✅ Instance ${instance} connected successfully`);
+    case ConnectionState.OPEN:
+      console.log(`${instance} connected`);
       break;
-    case "close":
-      console.log(`❌ Instance ${instance} disconnected (${statusReason})`);
+    case ConnectionState.CLOSED:
+      console.log(`${instance} disconnected (reason ${statusReason})`);
       break;
-    case "connecting":
-      console.log(`🔄 Instance ${instance} connecting...`);
+    case ConnectionState.CONNECTING:
+      console.log(`${instance} is connecting`);
       break;
   }
 }
 
-async function handleContact(
-  contactData: ContactPayload,
-  instance: string
-): Promise<void> {
-  const { remoteJid, pushName, profilePicUrl } = contactData;
-
+async function handleContact(contactData: ContactPayload): Promise<void> {
+  const { remoteJid, pushName } = contactData;
   console.log(`Contact update: ${pushName} (${remoteJid})`);
-
-  // Store or update contact information
-  // You might want to save this to your database
 }
 ```
 
-#### Advanced Webhook Processing
+### Events
 
-```ts
-class WebhookProcessor {
-  private messageQueue: MessagePayload[] = [];
-  private processing = false;
+Subscribe with the `WebhookEventSetup` name. The server puts the `WebhookEvent` value in the payload.
 
-  async processWebhook(webhookData: WebhookData): Promise<void> {
-    const { event, data, instance } = webhookData;
+| Subscribe with              | Payload `event`             | Sent when                                  |
+| --------------------------- | --------------------------- | ------------------------------------------ |
+| `APPLICATION_STARTUP`       | `application.startup`       | The API starts                             |
+| `INSTANCE_CREATE`           | `instance.create`           | An instance is created                     |
+| `INSTANCE_DELETE`           | `instance.delete`           | An instance is deleted                     |
+| `REMOVE_INSTANCE`           | `remove.instance`           | An instance is removed                     |
+| `LOGOUT_INSTANCE`           | `logout.instance`           | An instance logs out                       |
+| `STATUS_INSTANCE`           | `status.instance`           | The status of an instance changes          |
+| `QRCODE_UPDATED`            | `qrcode.updated`            | There is a new QR code                     |
+| `CONNECTION_UPDATE`         | `connection.update`         | The connection state changes               |
+| `MESSAGES_SET`              | `messages.set`              | Messages load after connecting             |
+| `MESSAGES_UPSERT`           | `messages.upsert`           | A message arrives                          |
+| `MESSAGES_EDITED`           | `messages.edited`           | A message is edited                        |
+| `MESSAGES_UPDATE`           | `messages.update`           | A message changes status                   |
+| `MESSAGES_DELETE`           | `messages.delete`           | A message is deleted                       |
+| `MESSAGING_HISTORY_SET`     | `messaging-history.set`     | The history sync reaches 100%              |
+| `SEND_MESSAGE`              | `send.message`              | A message is sent                          |
+| `SEND_MESSAGE_UPDATE`       | `send.message.update`       | A sent message changes status              |
+| `CONTACTS_SET`              | `contacts.set`              | Contacts load after connecting             |
+| `CONTACTS_UPSERT`           | `contacts.upsert`           | A contact is added                         |
+| `CONTACTS_UPDATE`           | `contacts.update`           | A contact changes                          |
+| `PRESENCE_UPDATE`           | `presence.update`           | Someone's presence changes                 |
+| `CHATS_SET`                 | `chats.set`                 | Chats load after connecting                |
+| `CHATS_UPSERT`              | `chats.upsert`              | A chat is added                            |
+| `CHATS_UPDATE`              | `chats.update`              | A chat changes                             |
+| `CHATS_DELETE`              | `chats.delete`              | A chat is deleted                          |
+| `GROUPS_UPSERT`             | `groups.upsert`             | A group is added                           |
+| `GROUP_UPDATE`              | `groups.update`             | A group changes (see below)                |
+| `GROUP_PARTICIPANTS_UPDATE` | `group-participants.update` | Members are added, removed or promoted     |
+| `LABELS_EDIT`               | `labels.edit`               | A label is edited                          |
+| `LABELS_ASSOCIATION`        | `labels.association`        | A label is added to or removed from a chat |
+| `CALL`                      | `call`                      | A call comes in                            |
+| `TYPEBOT_START`             | `typebot.start`             | A Typebot flow starts                      |
+| `TYPEBOT_CHANGE_STATUS`     | `typebot.change-status`     | A Typebot session changes status           |
 
-    // Add message to queue for batch processing
-    if (event === WebhookEvent.MESSAGES_UPSERT) {
-      this.messageQueue.push(data as MessagePayload);
-      this.processQueue();
-    }
-  }
+The server source (`develop`, July 2026) sends group changes as `groups.update`, which becomes the key `GROUPS_UPDATE`. No subscription list can hold that name, because the server only accepts `GROUP_UPDATE`. So `GROUP_UPDATE` events do not arrive. To follow groups, use `GROUPS_UPSERT` for new groups and `GROUP_PARTICIPANTS_UPDATE` for member changes.
 
-  private async processQueue(): Promise<void> {
-    if (this.processing || this.messageQueue.length === 0) return;
-
-    this.processing = true;
-
-    try {
-      // Process messages in batches
-      const batch = this.messageQueue.splice(0, 10);
-
-      for (const message of batch) {
-        await this.processMessage(message);
-        // Add delay to avoid rate limiting
-        await new Promise((resolve) => setTimeout(resolve, 100));
-      }
-    } finally {
-      this.processing = false;
-
-      // Continue processing if more messages arrived
-      if (this.messageQueue.length > 0) {
-        setTimeout(() => this.processQueue(), 1000);
-      }
-    }
-  }
-
-  private async processMessage(message: MessagePayload): Promise<void> {
-    // Your message processing logic here
-    console.log(`Processing message: ${message.key.id}`);
-  }
-}
-```
-
-#### Available Webhook Events
-
-The SDK supports all Evolution API webhook events:
-
-- `WebhookEvent.APPLICATION_STARTUP` - API startup
-- `WebhookEvent.QRCODE_UPDATED` - QR code updates
-- `WebhookEvent.CONNECTION_UPDATE` - Connection status changes
-- `WebhookEvent.MESSAGES_SET` - Initial message load
-- `WebhookEvent.MESSAGES_UPSERT` - New messages
-- `WebhookEvent.MESSAGES_UPDATE` - Message status updates
-- `WebhookEvent.MESSAGES_DELETE` - Message deletions
-- `WebhookEvent.SEND_MESSAGE` - Message sending events
-- `WebhookEvent.CONTACTS_SET` - Initial contacts load
-- `WebhookEvent.CONTACTS_UPSERT` - New contacts
-- `WebhookEvent.CONTACTS_UPDATE` - Contact updates
-- `WebhookEvent.PRESENCE_UPDATE` - User presence changes
-- `WebhookEvent.CHATS_SET` - Initial chats load
-- `WebhookEvent.CHATS_UPDATE` - Chat updates
-- `WebhookEvent.CHATS_UPSERT` - New chats
-- `WebhookEvent.CHATS_DELETE` - Chat deletions
-- `WebhookEvent.GROUPS_UPSERT` - New groups
-- `WebhookEvent.GROUPS_UPDATE` - Group updates
-- `WebhookEvent.GROUP_PARTICIPANTS_UPDATE` - Group member changes
-- `WebhookEvent.NEW_TOKEN` - JWT token updates
-
-#### Available Webhook Events to Setup
-
-To setup the WebHook, the constants are these ones:
-
-- `WebhookEventSetup.APPLICATION_STARTUP` - API startup
-- `WebhookEventSetup.QRCODE_UPDATED` - QR code updates
-- `WebhookEventSetup.CONNECTION_UPDATE` - Connection status changes
-- `WebhookEventSetup.MESSAGES_SET` - Initial message load
-- `WebhookEventSetup.MESSAGES_UPSERT` - New messages
-- `WebhookEventSetup.MESSAGES_UPDATE` - Message status updates
-- `WebhookEventSetup.MESSAGES_DELETE` - Message deletions
-- `WebhookEventSetup.SEND_MESSAGE` - Message sending events
-- `WebhookEventSetup.CONTACTS_SET` - Initial contacts load
-- `WebhookEventSetup.CONTACTS_UPSERT` - New contacts
-- `WebhookEventSetup.CONTACTS_UPDATE` - Contact updates
-- `WebhookEventSetup.PRESENCE_UPDATE` - User presence changes
-- `WebhookEventSetup.CHATS_SET` - Initial chats load
-- `WebhookEventSetup.CHATS_UPDATE` - Chat updates
-- `WebhookEventSetup.CHATS_UPSERT` - New chats
-- `WebhookEventSetup.CHATS_DELETE` - Chat deletions
-- `WebhookEventSetup.GROUPS_UPSERT` - New groups
-- `WebhookEventSetup.GROUPS_UPDATE` - Group updates
-- `WebhookEventSetup.GROUP_PARTICIPANTS_UPDATE` - Group member changes
-- `WebhookEventSetup.NEW_TOKEN` - JWT token updates
-
-#### Configure Webhook URL
-
-Don't forget to configure your webhook URL in the Evolution API:
-
-```ts
-// Set your webhook endpoint
-await client.webhook.set({
-  url: "https://your-domain.com/webhook",
-  webhook_by_events: true,
-  events: [
-    WebhookEventSetup.MESSAGES_UPSERT,
-    WebhookEventSetup.MESSAGES_UPDATE,
-    WebhookEventSetup.CONNECTION_UPDATE,
-    WebhookEventSetup.CONTACTS_UPSERT,
-  ],
-});
-```
-
-## API Documentation
+## API documentation
 
 Check the [official API documentation](https://doc.evolution-api.com/v2) for more information about their service.
 
 ## Contributing
 
 Feel free to contribute with suggestions or bug reports at our [GitHub repository](https://github.com/gusnips/evolution-api-sdk).
+
+To check that the SDK routes and verbs still exist on the server, clone the server source next to the SDK and run the script:
+
+```bash
+git clone https://github.com/evolution-foundation/evolution-api refs/evolution-api
+bun scripts/check-routes.ts
+```
 
 ## Authors
 

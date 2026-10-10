@@ -1,5 +1,5 @@
 // Pure TypeScript interfaces for better IDE support and performance
-import type { ChatId, MessageId } from "@/types/tags";
+import type { BaseMessageOptions, SentMessageResponse } from "./base";
 
 export interface Row {
   title: string;
@@ -12,25 +12,15 @@ export interface Section {
   rows: Row[];
 }
 
-export interface ListMessageOptions {
-  number: ChatId;
+export interface ListMessageOptions extends BaseMessageOptions {
+  title: string;
+  description?: string;
+  footerText: string;
+  /**
+   * Text of the button that opens the list
+   */
   buttonText: string;
-  text: string;
-  title?: string;
-  footer?: string;
   sections: Section[];
-  options?: {
-    delay?: number;
-    messageId?: MessageId;
-  };
 }
 
-export interface ListMessageResponse {
-  key: {
-    remoteJid: ChatId;
-    fromMe: boolean;
-    id: MessageId;
-  };
-  messageTimestamp: string;
-  status: string;
-} 
+export type ListMessageResponse = SentMessageResponse;

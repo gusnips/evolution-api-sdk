@@ -6,9 +6,9 @@ export interface RevokeInviteCodeRequest {
 }
 
 export interface RevokeInviteCodeResponse {
-  status: string;
-  code: string;
+  revoked: true;
+  /**
+   * The new invite code
+   */
+  inviteCode?: string;
 }
-
-// Backward compatibility aliases
-export type RevokeInviteCodeOptions = RevokeInviteCodeRequest; 

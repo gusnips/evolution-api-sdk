@@ -6,3 +6,5 @@
 
 # environment
 .env
+# upstream reference clones
+/refs/

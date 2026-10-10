@@ -3,13 +3,12 @@ import type { GroupJid } from "@/types/tags";
 
 export interface UpdatePictureRequest {
   groupJid: GroupJid;
-  url: string;
+  /**
+   * Image URL or file in base64
+   */
+  image: string;
 }
 
 export interface UpdatePictureResponse {
-  status: string;
-  message: string;
+  update: "success";
 }
-
-// Backward compatibility aliases
-export type UpdatePictureOptions = UpdatePictureRequest; 

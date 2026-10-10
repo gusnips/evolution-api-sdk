@@ -4,20 +4,17 @@ export interface FetchProfileRequest {
   number: string;
 }
 
-export interface ProfileStatus {
-  status: string;
-  setAt: string;
-}
-
 export interface FetchProfileResponse {
   wuid: string;
-  name: string | null;
+  name?: string;
   numberExists: boolean;
-  picture?: string;
-  status?: ProfileStatus;
+  picture?: string | null;
+  /**
+   * The About text of the profile
+   */
+  status?: string | null;
   isBusiness: boolean;
+  email?: string;
   description?: string;
+  website?: string;
 }
-
-// Backward compatibility aliases
-export type FetchProfileOptions = FetchProfileRequest; 
