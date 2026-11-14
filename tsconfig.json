@@ -2,9 +2,9 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["DOM", "ESNext"],
+    "types": ["node"],
     "module": "commonjs",
     "rootDir": "./src",
-    "baseUrl": ".",
     "declaration": true,
     "sourceMap": true,
     "outDir": "./lib",

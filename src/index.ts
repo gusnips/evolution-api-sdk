@@ -165,7 +165,7 @@ export type * from "./modules/license/schemas";
 export type { ClientOptions };
 
 // API types
-export { APIRequestInit, MethodOptions } from "./types/api";
+export type { APIRequestInit, MethodOptions } from "./types/api";
 export { MessageUpdateStatus } from "./types/messages";
 export {
   ChatId,

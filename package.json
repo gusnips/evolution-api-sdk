@@ -12,9 +12,9 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "release": "rm -rf lib && tsup ./src && npm publish",
+    "release": "rm -rf lib && tsdown && npm publish",
     "check-types": "tsc --noEmit",
-    "build": "tsup ./src",
+    "build": "tsdown",
     "lint": "eslint --fix"
   },
   "engines": {
@@ -25,8 +25,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.14.1",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3"
+    "tsdown": "0.23.7",
+    "typescript": "^7.0.2"
   },
   "keywords": [
     "evolution",
