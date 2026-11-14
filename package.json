@@ -14,8 +14,7 @@
   "scripts": {
     "release": "rm -rf lib && tsdown && npm publish",
     "check-types": "tsc --noEmit",
-    "build": "tsdown",
-    "lint": "eslint --fix"
+    "build": "tsdown"
   },
   "engines": {
     "node": ">=18.0.0"
